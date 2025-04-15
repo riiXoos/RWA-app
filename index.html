@@ -5,44 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rico World</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
         body {
             font-family: Arial, sans-serif;
             background-color: #000;
-            color: #FFD700; /* ذهبي */
+            color: #FFD700;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
             height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            align-items: center;
-            padding: 20px;
         }
         .container {
-            width: 100%;
             max-width: 500px;
-            text-align: center;
+            margin: 0 auto;
         }
         h1 {
-            font-size: 28px;
             margin-bottom: 30px;
             text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
         }
         input {
             width: 100%;
             padding: 15px;
-            margin: 15px 0;
+            margin: 10px 0;
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid #FFD700;
             border-radius: 8px;
             color: #FFD700;
             font-size: 16px;
-        }
-        input::placeholder {
-            color: rgba(255, 215, 0, 0.7);
         }
         button {
             width: 100%;
@@ -54,20 +45,16 @@
             font-size: 18px;
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.3s;
+            margin-top: 15px;
         }
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
-        }
-        iframe {
+        #contentFrame {
+            width: 100%;
+            height: 100vh;
+            border: none;
+            display: none;
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-            display: none;
             z-index: 100;
             background: #000;
         }
@@ -86,31 +73,30 @@
         <div id="errorMsg" class="error">Incorrect code! Try again.</div>
     </div>
 
-    <iframe id="contentFrame"></iframe>
+    <iframe id="contentFrame" title="Protected Content"></iframe>
 
     <script>
-        // كلمات السر والروابط
+        // الروابط المشفرة (استبدلها بروابطك)
         const secretLinks = {
-       "12345": "aHR0cHM6Ly94dGVxLWRldi5za3libHVlay5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9ZnJzanpfdHImaHRnc2VydmVyPWxvZ2luLXh0ZXEtZGV2LnNreWJsdWVrLmNvbSZyYW49MC4zMjY1ODc1NTk0MTMxODQwNyZvcGVuSWQ9YWFhMQ"
-   };
+            "112200": "aHR0cHM6Ly94dGVxLWRldi5za3libHVlay5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9ZnJzanpfdHImaHRnc2VydmVyPWxvZ2luLXh0ZXEtZGV2LnNreWJsdWVrLmNvbSZyYW49MC4zMjY1ODc1NTk0MTMxODQwNyZvcGVuSWQ9YWFhMQ==",
+            "990099": "aHR0cHM6Ly9jZG4teHRlcS5za3libHVlay5jb20=",
+            "12345": "aHR0cHM6Ly9nb29nbGUuY29t"
+        };
 
-   function decodeMagic(secret) {
-       return atob(secret); // هذه السحرية تفك الشفرة!
-   }
+        function decodeMagic(secret) {
+            return atob(secret); // فك التشفير
+        }
 
-   // عند الدخول:
-   frame.src = decodeMagic(secretLinks[password]);
         function checkPassword() {
-            const password = document.getElementById("passwordInput").value;
+            const password = document.getElementById("passwordInput").value.trim();
             const frame = document.getElementById("contentFrame");
             const errorMsg = document.getElementById("errorMsg");
+            const container = document.querySelector('.container');
             
-            if (passwordLinks[password]) {
+            if (secretLinks[password]) {
+                frame.src = decodeMagic(secretLinks[password]);
                 frame.style.display = "block";
-                frame.src = passwordLinks[password];
-                
-                // إخفاء واجهة الدخول
-                document.querySelector('.container').style.display = "none";
+                container.style.display = "none";
             } else {
                 errorMsg.style.display = "block";
                 setTimeout(() => {

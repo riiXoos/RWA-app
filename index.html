@@ -100,20 +100,6 @@
             20%, 60% { transform: translateX(-5px); }
             40%, 80% { transform: translateX(5px); }
         }
-        
-        .back-btn {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            z-index: 101;
-            display: none;
-            background: rgba(0,0,0,0.7);
-            color: var(--gold);
-            border: 1px solid var(--gold);
-            padding: 10px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
     </style>
 </head>
 <body>
@@ -123,8 +109,6 @@
         <button onclick="checkPassword()">ENTER</button>
         <div id="errorMsg" class="error">Incorrect code! Try again.</div>
     </div>
-
-    <button id="backBtn" class="back-btn" onclick="goBack()">← Back</button>
     
     <iframe id="contentFrame" title="Protected Content" allowfullscreen></iframe>
 
@@ -133,7 +117,7 @@
         const secretLinks = {
             // مجموعة 1 (أمثلة عامة)
             "880088": "aHR0cHM6Ly94dGVxLWRldi5za3libHVlay5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9ZnJzanpfdHImaHRnc2VydmVyPWxvZ2luLXh0ZXEtZGV2LnNreWJsdWVrLmNvbSZyYW49MC4zMjY1ODc1NTk0MTMxODQwNyZvcGVuSWQ9YWFhMQ",                          // google.com
-            "990099": "aHR0cHM6Ly95b3V0dWJlLmNvbQ==",                      // youtube.com
+            "010045": "aHR0cHM6Ly94ZnRndC1kZXYuc3pmYW5nemhvdWhkLmNvbS9pbmRleC5odG1sP2RlYnVnPTEmem9uZUtleT1zZ2NxX2Z0Z3QmaHRnc2VydmVyPWxvZ2luLXhmdGd0LWRldi5zemZhbmd6aG91aGQuY29tJnJhbj0wLjA1NzkxMTg5MDY1NDE4NDY3Jm9wZW5JZD1hYWEx==",                      // youtube.com
             "334455": "aHR0cHM6Ly9naXRodWIuY29t",                          // github.com
             "778899": "aHR0cHM6Ly93d3cuZmFjZWJvb2suY29t",                  // facebook.com
             "123456": "aHR0cHM6Ly90d2l0dGVyLmNvbQ==",                      // twitter.com
@@ -174,7 +158,6 @@
             const frame = document.getElementById("contentFrame");
             const errorMsg = document.getElementById("errorMsg");
             const container = document.querySelector('.container');
-            const backBtn = document.getElementById("backBtn");
             
             if (secretLinks[password]) {
                 const decodedLink = decodeMagic(secretLinks[password]);
@@ -182,20 +165,12 @@
                     frame.src = decodedLink;
                     frame.style.display = "block";
                     container.style.display = "none";
-                    backBtn.style.display = "block";
                 } else {
                     showError("Invalid link configuration");
                 }
             } else {
                 showError("Incorrect code! Try again.");
             }
-        }
-        
-        function goBack() {
-            document.getElementById("contentFrame").style.display = "none";
-            document.querySelector('.container').style.display = "block";
-            document.getElementById("backBtn").style.display = "none";
-            document.getElementById("passwordInput").value = "";
         }
         
         function showError(message) {

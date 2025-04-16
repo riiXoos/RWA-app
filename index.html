@@ -10,7 +10,7 @@
             --dark-gold: #FFA500;
             --error-red: #ff3333;
         }
-        
+
         body {
             font-family: 'Arial', sans-serif;
             background-color: #000;
@@ -22,20 +22,20 @@
             justify-content: center;
             align-items: center;
         }
-        
+
         .container {
             width: 100%;
             max-width: 500px;
             text-align: center;
             transition: all 0.3s ease;
         }
-        
+
         h1 {
             margin-bottom: 30px;
             text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
             font-size: 2.5rem;
         }
-        
+
         input {
             width: 100%;
             padding: 15px;
@@ -48,11 +48,11 @@
             outline: none;
             transition: border 0.3s;
         }
-        
+
         input:focus {
             border-color: var(--dark-gold);
         }
-        
+
         button {
             width: 100%;
             padding: 15px;
@@ -66,16 +66,16 @@
             margin-top: 20px;
             transition: transform 0.2s, box-shadow 0.2s;
         }
-        
+
         button:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
         }
-        
+
         button:active {
             transform: translateY(0);
         }
-        
+
         #contentFrame {
             position: fixed;
             top: 0;
@@ -87,14 +87,14 @@
             z-index: 100;
             background: #000;
         }
-        
+
         .error {
             color: var(--error-red);
             margin-top: 15px;
             display: none;
             animation: shake 0.5s;
         }
-        
+
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             20%, 60% { transform: translateX(-5px); }
@@ -109,11 +109,11 @@
         <button onclick="checkPassword()">ENTER</button>
         <div id="errorMsg" class="error">Incorrect code! Try again.</div>
     </div>
-    
+
     <iframe id="contentFrame" title="Protected Content" allowfullscreen></iframe>
 
     <script>
-        // قاعدة بيانات الباسوردات والروابط (20 مثال)
+        // قاعدة بيانات الباسوردات والروابط (60 مثال الآن)
         const secretLinks = {
             // مجموعة 1 (أمثلة عامة)
             "880088": "aHR0cHM6Ly94dGVxLWRldi5za3libHVlay5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9ZnJzanpfdHImaHRnc2VydmVyPWxvZ2luLXh0ZXEtZGV2LnNreWJsdWVrLmNvbSZyYW49MC4zMjY1ODc1NTk0MTMxODQwNyZvcGVuSWQ9YWFhMQ",                          // xteqxtest
@@ -121,27 +121,75 @@
             "334455": "aHR0cHM6Ly9naXRodWIuY29t",                          // github.com
             "778899": "aHR0cHM6Ly93d3cuZmFjZWJvb2suY29t",                  // facebook.com
             "123456": "aHR0cHM6Ly90d2l0dGVyLmNvbQ==",                      // twitter.com
-            
+
             // مجموعة 2)(مواقع تطوير)
             "r1234": "aHR0cHM6Ly9jZG4teGVuLnN6ZmFuZ3pob3VoZC5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9Z2hfZW5nJmh0Z3NlcnZlcj1sb2dpbi14anNxcS1kZXYuc3pmYW5nemhvdWhkLmNvbSZyYW49MC42OTUyODcwODE2NjUzNjYmb3BlbklkPWFhYTEmJg==",              // ricoxjsqq
             "168867": "aHR0cHM6Ly9jZG4teGVuLnN6ZmFuZ3pob3VoZC5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9Z2hfZW5nJmh0Z3NlcnZlcj1sb2dpbi14anNxcS1kZXYuc3pmYW5nemhvdWhkLmNvbSZyYW49MC42OTUyODcwODE2NjUzNjYmb3BlbklkPWExJiY=",                          // sale1xjsqq
             "1122733": "aHR0cHM6Ly9jZG4teGVuLnN6ZmFuZ3pob3VoZC5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9Z2hfZW5nJmh0Z3NlcnZlcj1sb2dpbi14anNxcS1kZXYuc3pmYW5nemhvdWhkLmNvbSZyYW49MC42OTUyODcwODE2NjUzNjYmb3BlbklkPXd6cDAwMSYm",         // sale2xjsqq/arabic-code
             "44523566": "aHR0cHM6Ly9jZG4teGVuLnN6ZmFuZ3pob3VoZC5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9Z2hfZW5nJmh0Z3NlcnZlcj1sb2dpbi14anNxcS1kZXYuc3pmYW5nemhvdWhkLmNvbSZyYW49MC42OTUyODcwODE2NjUzNjYmb3BlbklkPWNqcDImJg==",              // sale3xjsqq
             "66779288": "aHR0cHM6Ly9jZG4teGVuLnN6ZmFuZ3pob3VoZC5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9Z2hfZW5nJmh0Z3NlcnZlcj1sb2dpbi14anNxcS1kZXYuc3pmYW5nemhvdWhkLmNvbSZyYW49MC42OTUyODcwODE2NjUzNjYmb3BlbklkPWExMSYm",          // sale4xjsqq
-            
+
             // مجموعة 3 (أخبار وتقنية)
             "135790": "aHR0cHM6Ly9jZG4teHd4dHdvLnN6ZmFuZ3pob3VoZC5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9c2djcV9mdGd0Jmh0Z3NlcnZlcj1sb2dpbi14anNxcS5zemZhbmd6aG91aGQuY29tJnJhbj0wLjA1NzkxMTg5MDY1NDE4NDY3Jm9wZW5JZD1kNDdkY2YzNjkwYTY5Y2RlNDVkYjI5NWVkM2UzNGFkNA==",                      // girlxen
             "246800": "aHR0cHM6Ly93d3cuY24tbi5jb20=",                      // cn-n.com
             "101010": "aHR0cHM6Ly9hcmFiY3IuY29t",                          // arabcr.com
             "121212": "aHR0cHM6Ly93d3cudGVjaHJhZGFyLmNvbQ==",              // techradar.com
             "131313": "aHR0cHM6Ly93d3cudmVyZ2UuY29t",                      // theverge.com
-            
+
             // مجموعة 4 (تعليمية)
             "141414": "aHR0cHM6Ly9raGFuYWNhZGVteS5vcmc=",                  // khanacademy.org
             "151515": "aHR0cHM6Ly93d3cuY291cnNlcmEub3Jn",                  // coursera.org
             "245598": "aHR0cHM6Ly9jZG4teHpkLnNreWJsdWVrLmNvbS9pbmRleC5odG1sP2RlYnVnPTEmem9uZUtleT1mcnNqel9tZSZodGdzZXJ2ZXI9bG9naW4teHpkLWRldi5za3libHVlay5jb20mcmFuPTAuNTk0MzY0ODE3NTgzNjczMiZvcGVuSWQ9MQ==",                     // hoxayfaxzd
             "557712": "aHR0cHM6Ly9jZG4teHpkLnNreWJsdWVrLmNvbS9pbmRleC5odG1sP2RlYnVnPTEmem9uZUtleT1mcnNqel9tZSZodGdzZXJ2ZXI9bG9naW4teHpkLWRldi5za3libHVlay5jb20mcmFuPTAuNTk0MzY0ODE3NTgzNjczMiZvcGVuSWQ9YWFhNSYm",             // bingoxzd
-            "99045": "aHR0cHM6Ly94ZnRndC1kZXYuc3pmYW5nemhvdWhkLmNvbS9pbmRleC5odG1sP2RlYnVnPTEmem9uZUtleT1zZ2NxX2Z0Z3QmaHRnc2VydmVyPWxvZ2luLXhmdGd0LWRldi5zemZhbmd6aG91aGQuY29tJnJhbj0wLjA1NzkxMTg5MDY1NDE4NDY3Jm9wZW5JZD0x"                       // aminxftgt
+            "99045": "aHR0cHM6Ly94ZnRndC1kZXYuc3pmYW5nemhvdWhkLmNvbS9pbmRleC5odG1sP2RlYnVnPTEmem9uZUtleT1zZ2NxX2Z0Z3QmaHRnc2VydmVyPWxvZ2luLXhmdGd0LWRldi5zemZhbmd6aG91aGQuY29tJnJhbj0wLjA1NzkxMTg5MDY1NDE4NDY3Jm9wZW5JZD0x",                       // aminxftgt
+            
+            // المجموعة الجديدة 5 (مواقع متنوعة)
+            "202020": "aHR0cHM6Ly93d3cueW91dHViZS5jb20=",                  // youtube.com
+            "212121": "aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbQ==",              // instagram.com
+            "222222": "aHR0cHM6Ly93d3cubGlua2VkaW4uY29t",                  // linkedin.com
+            "232323": "aHR0cHM6Ly93d3cucmVkZGl0LmNvbQ==",                  // reddit.com
+            "242424": "aHR0cHM6Ly93d3cud2hhdHNhcHAuY29t",                  // whatsapp.com
+            "252525": "aHR0cHM6Ly93d3cuc25hcGNoYXQuY29t",                  // snapchat.com
+            "262626": "aHR0cHM6Ly93d3cudGlrdG9rLmNvbQ==",                  // tiktok.com
+            "272727": "aHR0cHM6Ly93d3cucGludGVyZXN0LmNvbQ==",              // pinterest.com
+            "282828": "aHR0cHM6Ly93d3cudHVtYmxyLmNvbQ==",                  // tumblr.com
+            "292929": "aHR0cHM6Ly93d3cud2VhdGhlci5jb20=",                  // weather.com
+            
+            // المجموعة الجديدة 6 (أخبار وتقنية)
+            "303030": "aHR0cHM6Ly93d3cuY25ldC5jb20=",                      // cnet.com
+            "313131": "aHR0cHM6Ly93d3cud2lyZWQuY29t",                      // wired.com
+            "323232": "aHR0cHM6Ly93d3cuZW5nYWRnZXQuY29t",                  // engadget.com
+            "333333": "aHR0cHM6Ly93d3cuZGlnaXRhbHRyZW5kcy5jb20=",          // digitaltrends.com
+            "343434": "aHR0cHM6Ly93d3cuZ2l6bW9kby5jb20=",                  // gizmodo.com
+            "353535": "aHR0cHM6Ly93d3cubWFzaGFibGUuY29t",                  // mashable.com
+            "363636": "aHR0cHM6Ly93d3cuc2NpZW5jZWRhaWx5LmNvbQ==",          // sciencedaily.com
+            "373737": "aHR0cHM6Ly93d3cubmF0dXJlLmNvbQ==",                  // nature.com
+            "383838": "aHR0cHM6Ly93d3cuc2NpZW50aWZpY2FtZXJpY2FuLmNvbQ==",  // scientificamerican.com
+            "393939": "aHR0cHM6Ly93d3cuc3BhY2UuY29t",                      // space.com
+            
+            // المجموعة الجديدة 7 (تعليم وثقافة)
+            "404040": "aHR0cHM6Ly93d3cudGVkLmNvbQ==",                      // ted.com
+            "414141": "aHR0cHM6Ly93d3cuZHVvbGluZ28uY29t",                  // duolingo.com
+            "424242": "aHR0cHM6Ly93d3cuc2tpbGxzaGFyZS5jb20=",              // skillshare.com
+            "434343": "aHR0cHM6Ly93d3cuYWNhZGVtaWEuZWR1",                  // academia.edu
+            "444444": "aHR0cHM6Ly93d3cuam9yZGFuLmNvbQ==",                  // jordan.com
+            "454545": "aHR0cHM6Ly93d3cuYXJhYmlhbmV0LmNvbQ==",              // arabianet.com
+            "464646": "aHR0cHM6Ly93d3cuYWxqYXplZXJhLm5ldA==",              // aljazeera.net
+            "474747": "aHR0cHM6Ly93d3cuYmJjLmNvbS9hcmFiaWM=",              // bbc.com/arabic
+            "484848": "aHR0cHM6Ly93d3cuc3BhbmlzaGRpY3QuY29t",              // spanishdict.com
+            "494949": "aHR0cHM6Ly93d3cuZGljdGlvbmFyeS5jb20=",              // dictionary.com
+            
+            // المجموعة الجديدة 8 (تسوق وخدمات)
+            "505050": "aHR0cHM6Ly93d3cuYW1hem9uLmNvbQ==",                  // amazon.com
+            "515151": "aHR0cHM6Ly93d3cuZWJheS5jb20=",                      // ebay.com
+            "525252": "aHR0cHM6Ly93d3cuYWxpZXhwcmVzcy5jb20=",              // aliexpress.com
+            "535353": "aHR0cHM6Ly93d3cuc2hlaW4uY29t",                      // shein.com
+            "545454": "aHR0cHM6Ly93d3cubm9vbi5jb20=",                      // noon.com
+            "555555": "aHR0cHM6Ly93d3cuamRwcm9kdWN0cy5jb20=",              // jdproducts.com
+            "565656": "aHR0cHM6Ly93d3cuemFyYS5jb20=",                      // zara.com
+            "575757": "aHR0cHM6Ly93d3cuaG0uY29t",                          // hm.com
+            "585858": "aHR0cHM6Ly93d3cuYWRpZGFzLmNvbQ==",                  // adidas.com
+            "595959": "aHR0cHM6Ly93d3cubmlrZS5jb20="                       // nike.com
         };
 
         function decodeMagic(secret) {
@@ -158,7 +206,7 @@
             const frame = document.getElementById("contentFrame");
             const errorMsg = document.getElementById("errorMsg");
             const container = document.querySelector('.container');
-            
+
             if (secretLinks[password]) {
                 const decodedLink = decodeMagic(secretLinks[password]);
                 if (decodedLink) {
@@ -172,7 +220,7 @@
                 showError("Incorrect code! Try again.");
             }
         }
-        
+
         function showError(message) {
             const errorMsg = document.getElementById("errorMsg");
             errorMsg.textContent = message;
@@ -181,7 +229,7 @@
                 errorMsg.style.display = "none";
             }, 3000);
         }
-        
+
         // تفعيل الزر عند الضغط على Enter
         document.getElementById("passwordInput").addEventListener("keyup", function(event) {
             if (event.key === "Enter") {

@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rico World</title>
+    <!-- Firebase لجمع وحظر الـ IPs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     <style>
         :root {
             --gold: #FFD700;
@@ -100,6 +103,16 @@
             20%, 60% { transform: translateX(-5px); }
             40%, 80% { transform: translateX(5px); }
         }
+
+        /* لوحة التحكم (إظهار/إخفاء) */
+        #adminPanel {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid var(--gold);
+            border-radius: 8px;
+        }
     </style>
 </head>
 <body>
@@ -108,12 +121,39 @@
         <input type="password" id="passwordInput" placeholder="Enter secret code" autocomplete="off">
         <button onclick="checkPassword()">ENTER</button>
         <div id="errorMsg" class="error">Incorrect code! Try again.</div>
+
+        <!-- لوحة التحكم (للمشرف فقط) -->
+        <div id="adminPanel">
+            <h3>👑 Admin Panel</h3>
+            <input type="password" id="adminPassword" placeholder="Admin Password">
+            <button onclick="showBlockedIPs()">Show Blocked IPs</button>
+            <div id="blockedIPsList"></div>
+            <input type="text" id="ipToBlock" placeholder="IP to Block">
+            <button onclick="blockIP()">Block IP</button>
+            <input type="text" id="ipToUnblock" placeholder="IP to Unblock">
+            <button onclick="unblockIP()">Unblock IP</button>
+        </div>
     </div>
 
     <iframe id="contentFrame" title="Protected Content" allowfullscreen></iframe>
 
     <script>
-        // قاعدة بيانات الباسوردات والروابط
+        // ⚙️ Firebase Config - استبدل القيم دي باللي هتاخدها من Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyD31ArwVR9L9H8p_ewGXq5b0cDcva0cqF0",
+            authDomain: "visitor-logger-89c4b.firebaseapp.com",
+            projectId: "visitor-logger-89c4b",
+            storageBucket: "visitor-logger-89c4b.appspot.com",
+            messagingSenderId: "82770471301",
+            appId: "1:82770471301:web:8ae6147496f9075ca47cec"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // 🔑 كلمة السر الخاصة بلوحة التحكم (غيرها لأي حاجة تريدها)
+        const ADMIN_PASSWORD = "rico899009899009";
+
+        // 🔄 قاعدة بيانات الباسوردات والروابط (كما هي عندك)
         const secretLinks = {
             // مجموعة 1 (أمثلة عامة)
             "880088": "aHR0cHM6Ly94dGVxLWRldi5za3libHVlay5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9ZnJzanpfdHImaHRnc2VydmVyPWxvZ2luLXh0ZXEtZGV2LnNreWJsdWVrLmNvbSZyYW49MC4zMjY1ODc1NTk0MTMxODQwNyZvcGVuSWQ9YWFhMQ",    //testXteq
@@ -190,7 +230,7 @@
             "aaa46544": "aHR0cHM6Ly9jZG4teHRlcS5zemZhbmd6aG91aGQuY29tL2luZGV4Lmh0bWw/ZGVidWc9MSZ6b25lS2V5PWZyc2p6X3RyJmh0Z3NlcnZlcj1sb2dpbi14dGVxLWRldi5za3libHVlay5jb20mcmFuPTAuMzI2NTg3NTU5NDEzMTg0MDcmb3BlbklkPWFhYTQm",
             "aaa5298": "aHR0cHM6Ly9jZG4teHRlcS5zemZhbmd6aG91aGQuY29tL2luZGV4Lmh0bWw/ZGVidWc9MSZ6b25lS2V5PWZyc2p6X3RyJmh0Z3NlcnZlcj1sb2dpbi14dGVxLWRldi5za3libHVlay5jb20mcmFuPTAuMzI2NTg3NTU5NDEzMTg0MDcmb3BlbklkPWFhYTUmJg==",
             "aaa63468": "aHR0cHM6Ly9jZG4teHRlcS5zemZhbmd6aG91aGQuY29tL2luZGV4Lmh0bWw/ZGVidWc9MSZ6b25lS2V5PWZyc2p6X3RyJmh0Z3NlcnZlcj1sb2dpbi14dGVxLWRldi5za3libHVlay5jb20mcmFuPTAuMzI2NTg3NTU5NDEzMTg0MDcmb3BlbklkPWFhYTYm",
-            "754111": "aHR0cHM6Ly9jZG4teHRlcS5zemZhbmd6aG91aGQuY29tL2luZGV4Lmh0bWw/ZGVidWc9MSZ6b25lS2V5PWZyc2p6X3RyJmh0Z3NlcnZlcj1sb2dpbi14dGVxLWRldi5za3libHVlay5jb20mcmFuPTAuMzI2NTg3NTU5NDEzMTg0MDcmb3BlbklkPTExMQ==",
+            "754111": "aHR0cHM6Ly9jZG4-teHRlcS5zemZhbmd6aG91aGQuY29tL2luZGV4Lmh0bWw/ZGVidWc9MSZ6b25lS2V5PWZyc2p6X3RyJmh0Z3NlcnZlcj1sb2dpbi14dGVxLWRldi5za3libHVlay5jb20mcmFuPTAuMzI2NTg3NTU5NDEzMTg0MDcmb3BlbklkPTExMQ==",
             "Cjp7733": "aHR0cHM6Ly9jZG4teHRlcS5zemZhbmd6aG91aGQuY29tL2luZGV4Lmh0bWw/ZGVidWc9MSZ6b25lS2V5PWZyc2p6X3RyJmh0Z3NlcnZlcj1sb2dpbi14dGVxLWRldi5za3libHVlay5jb20mcmFuPTAuMzI2NTg3NTU5NDEzMTg0MDcmb3BlbklkPWNqcDEm",
 
             // المجموعة الجديدة 10 (freeAcc)
@@ -202,7 +242,7 @@
             "enfree6": "aHR0cHM6Ly9jZG4teGVuLnN6ZmFuZ3pob3VoZC5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9Z2hfZW5nJmh0Z3NlcnZlcj1sb2dpbi14anNxcS1kZXYuc3pmYW5nemhvdWhkLmNvbSZyYW49MC42OTUyODcwODE2NjUzNjYmb3BlbklkPTc0MjI2MjAzNDY2Mw==",
             "enfree7": "aHR0cHM6Ly9jZG4teGVuLnN6ZmFuZ3pob3VoZC5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9Z2hfZW5nJmh0Z3NlcnZlcj1sb2dpbi14anNxcS1kZXYuc3pmYW5nemhvdWhkLmNvbSZyYW49MC42OTUyODcwODE2NjUzNjYmb3BlbklkPTc0MjIwMDAw",
             "enfree8": "aHR0cHM6Ly9jZG4teGVuLnN6ZmFuZ3pob3VoZC5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9Z2hfZW5nJmh0Z3NlcnZlcj1sb2dpbi14anNxcS1kZXYuc3pmYW5nemhvdWhkLmNvbSZyYW49MC42OTUyODcwODE2NjUzNjYmb3BlbklkPTc0MjIwOTc0MjEyNTc=",
-            "enfree9": "aHR0cHM6Ly9jZG4teGVuLnN6ZmFuZ3pob3VoZC5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9Z2hfZW5nJmh0Z3NlcnZlcj1sb2dpbi14anNxcS1kZXYuc3pmYW5nemhvdWhkLmNvbSZyYW49MC42OTUyODcwODE2NjUzNjYmb3BlbklkPTk4NzY2NDIzNTg5OTcyMQ==",
+            "enfree9": "aHR0cHM6Ly9jZG4-teGVuLnN6ZmFuZ3pob3VoZC5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9Z2hfZW5nJmh0Z3NlcnZlcj1sb2dpbi14anNxcS1kZXYuc3pmYW5nemhvdWhkLmNvbSZyYW49MC42OTUyODcwODE2NjUzNjYmb3BlbklkPTk4NzY2NDIzNTg5OTcyMQ==",
             "enfree10": "aHR0cHM6Ly9jZG4teGVuLnN6ZmFuZ3pob3VoZC5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9Z2hfZW5nJmh0Z3NlcnZlcj1sb2dpbi14anNxcS1kZXYuc3pmYW5nemhvdWhkLmNvbSZyYW49MC42OTUyODcwODE2NjUzNjYmb3BlbklkPTk4NzY2NDIzOTcyMTAw",
             "free011": "aHR0cHM6Ly9leGFtcGxlLmNvbS9hY2MxMQ==",
             "free012": "aHR0cHM6Ly9leGFtcGxlLmNvbS9hY2MxMg==",
@@ -271,6 +311,12 @@
             const errorMsg = document.getElementById("errorMsg");
             const container = document.querySelector('.container');
 
+            // لو دخل كلمة السر الإدارية
+            if (password === ADMIN_PASSWORD) {
+                document.getElementById("adminPanel").style.display = "block";
+                return;
+            }
+
             if (secretLinks[password]) {
                 const decodedLink = decodeMagic(secretLinks[password]);
                 if (decodedLink) {
@@ -294,12 +340,68 @@
             }, 3000);
         }
 
-        // تفعيل الزر عند الضغط على Enter
+        // 🌐 جمع IP الزائر والتحقق من الحظر
+        function getVisitorIP() {
+            fetch('https://api.ipify.org?format=json')
+                .then(response => response.json())
+                .then(data => {
+                    const ip = data.ip;
+                    checkIfBlocked(ip);
+                });
+        }
+
+        // ⛔ تحقق لو IP محظور
+        async function checkIfBlocked(ip) {
+            const doc = await db.collection("blockedIPs").doc(ip).get();
+            if (doc.exists) {
+                window.location.href = "https://www.google.com"; // توجيهه لصفحة أخرى
+            }
+        }
+
+        // 🛑 حظر IP
+        async function blockIP() {
+            const ip = document.getElementById("ipToBlock").value.trim();
+            if (ip) {
+                await db.collection("blockedIPs").doc(ip).set({ timestamp: new Date() });
+                alert(`تم حظر IP: ${ip}`);
+            }
+        }
+
+        // ✅ فك حظر IP
+        async function unblockIP() {
+            const ip = document.getElementById("ipToUnblock").value.trim();
+            if (ip) {
+                await db.collection("blockedIPs").doc(ip).delete();
+                alert(`تم فك حظر IP: ${ip}`);
+            }
+        }
+
+        // 📋 عرض IPs المحظورة
+        async function showBlockedIPs() {
+            const adminPassword = document.getElementById("adminPassword").value.trim();
+            if (adminPassword !== ADMIN_PASSWORD) {
+                alert("Wrong Admin Password!");
+                return;
+            }
+
+            const snapshot = await db.collection("blockedIPs").get();
+            let ips = [];
+            snapshot.forEach(doc => {
+                ips.push(doc.id);
+            });
+            document.getElementById("blockedIPsList").innerHTML = 
+                `<strong>Blocked IPs:</strong><br>${ips.join("<br>")}`;
+        }
+
+        // 🎯 تفعيل عند الضغط على Enter
         document.getElementById("passwordInput").addEventListener("keyup", function(event) {
             if (event.key === "Enter") {
                 checkPassword();
             }
         });
+
+        // 🚀 تشغيل عند تحميل الصفحة
+        window.onload = getVisitorIP;
     </script>
 </body>
 </html>

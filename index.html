@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rico World</title>
-    <!-- Firebase لجمع وحظر الـ IPs -->
+    <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     <style>
@@ -12,6 +12,7 @@
             --gold: #FFD700;
             --dark-gold: #FFA500;
             --error-red: #ff3333;
+            --success-green: #4CAF50;
         }
 
         body {
@@ -28,7 +29,7 @@
 
         .container {
             width: 100%;
-            max-width: 500px;
+            max-width: 800px;
             text-align: center;
             transition: all 0.3s ease;
         }
@@ -98,13 +99,19 @@
             animation: shake 0.5s;
         }
 
+        .success {
+            color: var(--success-green);
+            margin-top: 15px;
+            display: none;
+        }
+
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             20%, 60% { transform: translateX(-5px); }
             40%, 80% { transform: translateX(5px); }
         }
 
-        /* لوحة التحكم (إظهار/إخفاء) */
+        /* لوحة التحكم */
         #adminPanel {
             display: none;
             margin-top: 20px;
@@ -112,6 +119,41 @@
             background: rgba(0, 0, 0, 0.7);
             border: 1px solid var(--gold);
             border-radius: 8px;
+        }
+
+        .visitors-table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+
+        .visitors-table th, .visitors-table td {
+            padding: 10px;
+            border: 1px solid var(--gold);
+            text-align: left;
+        }
+
+        .visitors-table th {
+            background-color: rgba(255, 215, 0, 0.2);
+        }
+
+        .action-btn {
+            padding: 5px 10px;
+            margin: 0 5px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .block-btn {
+            background-color: var(--error-red);
+            color: white;
+        }
+
+        .unblock-btn {
+            background-color: var(--success-green);
+            color: white;
         }
     </style>
 </head>
@@ -121,24 +163,31 @@
         <input type="password" id="passwordInput" placeholder="Enter secret code" autocomplete="off">
         <button onclick="checkPassword()">ENTER</button>
         <div id="errorMsg" class="error">Incorrect code! Try again.</div>
+        <div id="successMsg" class="success"></div>
 
-        <!-- لوحة التحكم (للمشرف فقط) -->
+        <!-- لوحة التحكم -->
         <div id="adminPanel">
             <h3>👑 Admin Panel</h3>
             <input type="password" id="adminPassword" placeholder="Admin Password">
-            <button onclick="showBlockedIPs()">Show Blocked IPs</button>
-            <div id="blockedIPsList"></div>
-            <input type="text" id="ipToBlock" placeholder="IP to Block">
-            <button onclick="blockIP()">Block IP</button>
-            <input type="text" id="ipToUnblock" placeholder="IP to Unblock">
-            <button onclick="unblockIP()">Unblock IP</button>
+            <button onclick="verifyAdmin()">Access Admin Panel</button>
+            
+            <div id="adminControls" style="display:none;">
+                <h4>Visitors Management</h4>
+                <div id="visitorsList"></div>
+                
+                <h4>Manual IP Management</h4>
+                <input type="text" id="ipToBlock" placeholder="IP to Block">
+                <button onclick="blockIP()">Block IP</button>
+                <input type="text" id="ipToUnblock" placeholder="IP to Unblock">
+                <button onclick="unblockIP()">Unblock IP</button>
+            </div>
         </div>
     </div>
 
     <iframe id="contentFrame" title="Protected Content" allowfullscreen></iframe>
 
     <script>
-        // ⚙️ Firebase Config - استبدل القيم دي باللي هتاخدها من Firebase
+        // Firebase Config - استبدل بك
         const firebaseConfig = {
             apiKey: "AIzaSyD31ArwVR9L9H8p_ewGXq5b0cDcva0cqF0",
             authDomain: "visitor-logger-89c4b.firebaseapp.com",
@@ -150,12 +199,11 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // 🔑 كلمة السر الخاصة بلوحة التحكم (غيرها لأي حاجة تريدها)
-        const ADMIN_PASSWORD = "rico899009899009";
+        // كلمة السر الإدارية
+        const ADMIN_PASSWORD = "rico899009899009119";
 
-        // 🔄 قاعدة بيانات الباسوردات والروابط (كما هي عندك)
+        // قاعدة بيانات الباسوردات والروابط (تم الحفاظ عليها كما هي)
         const secretLinks = {
-            // مجموعة 1 (أمثلة عامة)
             "880088": "aHR0cHM6Ly94dGVxLWRldi5za3libHVlay5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9ZnJzanpfdHImaHRnc2VydmVyPWxvZ2luLXh0ZXEtZGV2LnNreWJsdWVrLmNvbSZyYW49MC4zMjY1ODc1NTk0MTMxODQwNyZvcGVuSWQ9YWFhMQ",    //testXteq
             "010045": "aHR0cHM6Ly94ZnRndC1kZXYuc3pmYW5nemhvdWhkLmNvbS9pbmRleC5odG1sP2RlYnVnPTEmem9uZUtleT1zZ2NxX2Z0Z3QmaHRnc2VydmVyPWxvZ2luLXhmdGd0LWRldi5zemZhbmd6aG91aGQuY29tJnJhbj0wLjA1NzkxMTg5MDY1NDE4NDY3Jm9wZW5JZD1hYWExJiY=",    //dadyXftgt
             "s40013543": "aHR0cHM6Ly9jZG4teGVuLnN6ZmFuZ3pob3VoZC5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9Z2hfZW5nJmh0Z3NlcnZlcj1sb2dpbi14emQuc2t5Ymx1ZWsuY29tJnJhbj0wLjY5NTI4NzA4MTY2NTM2NiZvcGVuSWQ9YzFkNDlkOGZiZjk4YzAyZDU1ZTY0NjdiN2NjNWNlZTI=", //3abodXzdXen
@@ -296,6 +344,9 @@
             "cnfree60": "aHR0cHM6Ly94ZnRndC1kZXYuc3pmYW5nemhvdWhkLmNvbS9pbmRleC5odG1sP2RlYnVnPTEmem9uZUtleT1zZ2NxX2Z0Z3QmaHRnc2VydmVyPWxvZ2luLXhmdGd0LWRldi5zemZhbmd6aG91aGQuY29tJnJhbj0wLjA1NzkxMTg5MDY1NDE4NDY3Jm9wZW5JZD04NjQyNDY4"
         };
 
+        // متغير لحالة المسؤول
+        let isAdminVerified = false;
+
         function decodeMagic(secret) {
             try {
                 return atob(secret);
@@ -311,7 +362,6 @@
             const errorMsg = document.getElementById("errorMsg");
             const container = document.querySelector('.container');
 
-            // لو دخل كلمة السر الإدارية
             if (password === ADMIN_PASSWORD) {
                 document.getElementById("adminPanel").style.display = "block";
                 return;
@@ -331,6 +381,109 @@
             }
         }
 
+        function verifyAdmin() {
+            const adminPassword = document.getElementById("adminPassword").value.trim();
+            if (adminPassword === ADMIN_PASSWORD) {
+                isAdminVerified = true;
+                document.getElementById("adminControls").style.display = "block";
+                loadVisitors();
+                showSuccess("Admin access granted");
+            } else {
+                showError("Wrong admin password!");
+            }
+        }
+
+        async function loadVisitors() {
+            if (!isAdminVerified) return;
+            
+            try {
+                const snapshot = await db.collection("visitors").orderBy("lastVisit", "desc").limit(50).get();
+                let html = '<table class="visitors-table"><tr><th>IP</th><th>Last Visit</th><th>Visits</th><th>Status</th><th>Actions</th></tr>';
+                
+                const blockedSnapshot = await db.collection("blockedIPs").get();
+                const blockedIPs = blockedSnapshot.docs.map(doc => doc.id);
+
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    const isBlocked = blockedIPs.includes(doc.id);
+                    html += `
+                        <tr>
+                            <td>${doc.id}</td>
+                            <td>${new Date(data.lastVisit).toLocaleString()}</td>
+                            <td>${data.visits || 1}</td>
+                            <td>${isBlocked ? '❌ Blocked' : '✅ Active'}</td>
+                            <td>
+                                ${!isBlocked ? `<button class="action-btn block-btn" onclick="blockIP('${doc.id}')">Block</button>` : ''}
+                                ${isBlocked ? `<button class="action-btn unblock-btn" onclick="unblockIP('${doc.id}')">Unblock</button>` : ''}
+                            </td>
+                        </tr>
+                    `;
+                });
+                
+                html += '</table>';
+                document.getElementById("visitorsList").innerHTML = html;
+            } catch (error) {
+                console.error("Error loading visitors:", error);
+                showError("Failed to load visitors data");
+            }
+        }
+
+        async function logVisitor(ip) {
+            try {
+                await db.collection("visitors").doc(ip).set({
+                    lastVisit: new Date(),
+                    visits: firebase.firestore.FieldValue.increment(1)
+                }, { merge: true });
+                console.log("Visitor logged:", ip);
+            } catch (error) {
+                console.error("Error logging visitor:", error);
+            }
+        }
+
+        async function checkIfBlocked(ip) {
+            try {
+                const doc = await db.collection("blockedIPs").doc(ip).get();
+                if (doc.exists) {
+                    window.location.href = "https://www.google.com";
+                } else {
+                    logVisitor(ip);
+                }
+            } catch (error) {
+                console.error("Error checking blocked IPs:", error);
+            }
+        }
+
+        async function blockIP(ip = null) {
+            const ipToBlock = ip || document.getElementById("ipToBlock").value.trim();
+            if (!ipToBlock) return;
+
+            try {
+                await db.collection("blockedIPs").doc(ipToBlock).set({ 
+                    blockedAt: new Date(),
+                    blockedBy: isAdminVerified ? "admin" : "system"
+                });
+                showSuccess(`IP ${ipToBlock} has been blocked`);
+                if (isAdminVerified) loadVisitors();
+            } catch (error) {
+                console.error("Error blocking IP:", error);
+                showError("Failed to block IP");
+            }
+        }
+
+        async function unblockIP(ip = null) {
+            const ipToUnblock = ip || document.getElementById("ipToUnblock").value.trim();
+            if (!ipToUnblock) return;
+
+            try {
+                await db.collection("blockedIPs").doc(ipToUnblock).delete();
+                showSuccess(`IP ${ipToUnblock} has been unblocked`);
+                if (isAdminVerified) loadVisitors();
+            } catch (error) {
+                console.error("Error unblocking IP:", error);
+                showError("Failed to unblock IP");
+            }
+        }
+
         function showError(message) {
             const errorMsg = document.getElementById("errorMsg");
             errorMsg.textContent = message;
@@ -340,68 +493,33 @@
             }, 3000);
         }
 
-        // 🌐 جمع IP الزائر والتحقق من الحظر
-        function getVisitorIP() {
-            fetch('https://api.ipify.org?format=json')
-                .then(response => response.json())
-                .then(data => {
-                    const ip = data.ip;
-                    checkIfBlocked(ip);
-                });
+        function showSuccess(message) {
+            const successMsg = document.getElementById("successMsg");
+            successMsg.textContent = message;
+            successMsg.style.display = "block";
+            setTimeout(() => {
+                successMsg.style.display = "none";
+            }, 3000);
         }
 
-        // ⛔ تحقق لو IP محظور
-        async function checkIfBlocked(ip) {
-            const doc = await db.collection("blockedIPs").doc(ip).get();
-            if (doc.exists) {
-                window.location.href = "https://www.google.com"; // توجيهه لصفحة أخرى
-            }
-        }
-
-        // 🛑 حظر IP
-        async function blockIP() {
-            const ip = document.getElementById("ipToBlock").value.trim();
-            if (ip) {
-                await db.collection("blockedIPs").doc(ip).set({ timestamp: new Date() });
-                alert(`تم حظر IP: ${ip}`);
-            }
-        }
-
-        // ✅ فك حظر IP
-        async function unblockIP() {
-            const ip = document.getElementById("ipToUnblock").value.trim();
-            if (ip) {
-                await db.collection("blockedIPs").doc(ip).delete();
-                alert(`تم فك حظر IP: ${ip}`);
-            }
-        }
-
-        // 📋 عرض IPs المحظورة
-        async function showBlockedIPs() {
-            const adminPassword = document.getElementById("adminPassword").value.trim();
-            if (adminPassword !== ADMIN_PASSWORD) {
-                alert("Wrong Admin Password!");
-                return;
-            }
-
-            const snapshot = await db.collection("blockedIPs").get();
-            let ips = [];
-            snapshot.forEach(doc => {
-                ips.push(doc.id);
-            });
-            document.getElementById("blockedIPsList").innerHTML = 
-                `<strong>Blocked IPs:</strong><br>${ips.join("<br>")}`;
-        }
-
-        // 🎯 تفعيل عند الضغط على Enter
+        // Event Listeners
         document.getElementById("passwordInput").addEventListener("keyup", function(event) {
             if (event.key === "Enter") {
                 checkPassword();
             }
         });
 
-        // 🚀 تشغيل عند تحميل الصفحة
-        window.onload = getVisitorIP;
+        // Get visitor IP on page load
+        window.onload = function() {
+            fetch('https://api.ipify.org?format=json')
+                .then(response => response.json())
+                .then(data => {
+                    checkIfBlocked(data.ip);
+                })
+                .catch(error => {
+                    console.error("Error getting IP:", error);
+                });
+        };
     </script>
 </body>
 </html>

@@ -170,11 +170,11 @@
             <h3>👑 Admin Panel</h3>
             <input type="password" id="adminPassword" placeholder="Admin Password">
             <button onclick="verifyAdmin()">Access Admin Panel</button>
-            
+
             <div id="adminControls" style="display:none;">
                 <h4>Visitors Management</h4>
                 <div id="visitorsList"></div>
-                
+
                 <h4>Manual IP Management</h4>
                 <input type="text" id="ipToBlock" placeholder="IP to Block">
                 <button onclick="blockIP()">Block IP</button>
@@ -199,8 +199,8 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // كلمة السر الإدارية
-        const ADMIN_PASSWORD = "rico899009899009119";
+        // admin
+        const ADMIN_PASSWORD = "rico011899009";
 
         // قاعدة بيانات الباسوردات والروابط (تم الحفاظ عليها كما هي)
         const secretLinks = {
@@ -235,7 +235,7 @@
             "s116876": "aHR0cHM6Ly9jZG4teGVuLnN6ZmFuZ3pob3VoZC5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9ZnJzanpfbWUmaHRnc2VydmVyPWxvZ2luLXh6ZC5za3libHVlay5jb20mcmFuPTAuMjU5MzUxNjA0NTg2MTY1MjQmb3BlbklkPTcwYzhlNjRhYTI3YWVjM2M5YzAwYmU4NWE5YzhiNDc1",  //s116Xzd
             "Scorpion": "aHR0cHM6Ly9jZG4teHpkLnNreWJsdWVrLmNvbS9pbmRleC5odG1sP2RlYnVnPTEmem9uZUtleT1mcnNqel9tZSZodGdzZXJ2ZXI9bG9naW4teHpkLWRldi5za3libHVlay5jb20mcmFuPTAuOTI4NTg0NjM0MDcyMTA5Jm9wZW5JZD1hMyYm",  //zahoshXzd
             "sasafayed": "aHR0cHM6Ly9jZG4teHpkLnNreWJsdWVrLmNvbS9pbmRleC5odG1sP2RlYnVnPTEmem9uZUtleT1mcnNqel9tZSZodGdzZXJ2ZXI9bG9naW4teHpkLWRldi5za3libHVlay5jb20mcmFuPTAuOTI4NTg0NjM0MDcyMTA5Jm9wZW5JZD1hMTAmJiYmJg==",   //sold1Xzd
-            "d3kxzd": "aHR0cHM6Ly9jZG4teHpkLnNreWJsdWVrLmNvbS9pbmRleC5odG1sP2RlYnVnPTEmem9uZUtleT1mcnNqel9tZSZodGdzZXJ2ZXI9bG9naW4teHpkLWRldi5za3libHVlay5jb20mcmFuPTAuOTI4NTg0NjM0MDcyMTA5Jm9wZW5JZD1janAxJiYmJiYm",   //D3Kxzd
+            "d3yxzd": "aHR0cHM6Ly9jZG4teHpkLnNreWJsdWVrLmNvbS9pbmRleC5odG1sP2RlYnVnPTEmem9uZUtleT1mcnNqel9tZSZodGdzZXJ2ZXI9bG9naW4teHpkLWRldi5za3libHVlay5jb20mcmFuPTAuOTI4NTg0NjM0MDcyMTA5Jm9wZW5JZD1janAxJiYmJiYm",   //D3Kxzd
             "7548647": "aHR0cHM6Ly9jZG4teHpkLnNreWJsdWVrLmNvbS9pbmRleC5odG1sP2RlYnVnPTEmem9uZUtleT1mcnNqel9tZSZodGdzZXJ2ZXI9bG9naW4tldi5za3libHVlay5jb20mcmFuPTAuOTI4NTg0NjM0MDcyMTA5Jm9wZW5JZD1janAxJiYmJiYm",
             "252525": "aHR0cHM6Ly93d3cuc25hcGNoYXQuY29t",
             "262626": "aHR0cHM6Ly93d3cudGlrdG9rLmNvbQ==",
@@ -274,24 +274,24 @@
             "hassan199811": "aHR0cHM6Ly9jZG4teHRlcS5zemZhbmd6aG91aGQuY29tL2luZGV4Lmh0bWw/ZGVidWc9MSZ6b25lS2V5PWZyc2p6X3RyJmh0Z3NlcnZlcj1sb2dpbi14dGVxLWRldi5za3libHVlay5jb20mcmFuPTAuMzI2NTg3NTU5NDEzMTg0MDcmb3BlbklkPWEzJiYm",
             "aaa13444": "aHR0cHM6Ly9jZG4teHRlcS5zemZhbmd6aG91aGQuY29tL2luZGV4Lmh0bWw/ZGVidWc9MSZ6b25lS2V5PWZyc2p6X3RyJmh0Z3NlcnZlcj1sb2dpbi14dGVxLWRldi5za3libHVlay5jb20mcmFuPTAuMzI2NTg3NTU5NDEzMTg0MDcmb3BlbklkPWFhYTEmJg==",
             "omar11019966": "aHR0cHM6Ly9jZG4teHRlcS5zemZhbmd6aG91aGQuY29tL2luZGV4Lmh0bWw/ZGVidWc9MSZ6b25lS2V5PWZyc2p6X3RyJmh0Z3NlcnZlcj1sb2dpbi14dGVxLWRldi5za3libHVlay5jb20mcmFuPTAuMzI2NTg3NTU5NDEzMTg0MDcmb3BlbklkPWFhYTIm",
-            "aaa36544": "aHR0cHM6Ly9jZG4teHRlcS5zemZhbmd6aG91aGQuY29tL2luZGV4Lmh0bWw/ZGVidWc9MSZ6b25lS2V5PWZyc2p6X3RyJmh0Z3NlcnZlcj1sb2dpbi14dGVxLWRldi5za3libHVlay5jb20mcmFuPTAuMzI2NTg3NTU5NDEzMTg0MDcmb3BlbklkPWFhYTMmJg==",
+            "aaa36544": "aHR0cHM6Ly9jZG4-teHRlcS5zemZhbmd6aG91aGQuY29tL2luZGV4Lmh0bWw/ZGVidWc9MSZ6b25lS2V5PWZyc2p6X3RyJmh0Z3NlcnZlcj1sb2dpbi14dGVxLWRldi5za3libHVlay5jb20mcmFuPTAuMzI2NTg3NTU5NDEzMTg0MDcmb3BlbklkPWFhYTMmJg==",
             "aaa46544": "aHR0cHM6Ly9jZG4teHRlcS5zemZhbmd6aG91aGQuY29tL2luZGV4Lmh0bWw/ZGVidWc9MSZ6b25lS2V5PWZyc2p6X3RyJmh0Z3NlcnZlcj1sb2dpbi14dGVxLWRldi5za3libHVlay5jb20mcmFuPTAuMzI2NTg3NTU5NDEzMTg0MDcmb3BlbklkPWFhYTQm",
             "aaa5298": "aHR0cHM6Ly9jZG4teHRlcS5zemZhbmd6aG91aGQuY29tL2luZGV4Lmh0bWw/ZGVidWc9MSZ6b25lS2V5PWZyc2p6X3RyJmh0Z3NlcnZlcj1sb2dpbi14dGVxLWRldi5za3libHVlay5jb20mcmFuPTAuMzI2NTg3NTU5NDEzMTg0MDcmb3BlbklkPWFhYTUmJg==",
             "aaa63468": "aHR0cHM6Ly9jZG4teHRlcS5zemZhbmd6aG91aGQuY29tL2luZGV4Lmh0bWw/ZGVidWc9MSZ6b25lS2V5PWZyc2p6X3RyJmh0Z3NlcnZlcj1sb2dpbi14dGVxLWRldi5za3libHVlay5jb20mcmFuPTAuMzI2NTg3NTU5NDEzMTg0MDcmb3BlbklkPWFhYTYm",
             "754111": "aHR0cHM6Ly9jZG4-teHRlcS5zemZhbmd6aG91aGQuY29tL2luZGV4Lmh0bWw/ZGVidWc9MSZ6b25lS2V5PWZyc2p6X3RyJmh0Z3NlcnZlcj1sb2dpbi14dGVxLWRldi5za3libHVlay5jb20mcmFuPTAuMzI2NTg3NTU5NDEzMTg0MDcmb3BlbklkPTExMQ==",
-            "Cjp7733": "aHR0cHM6Ly9jZG4teHRlcS5zemZhbmd6aG91aGQuY29tL2luZGV4Lmh0bWw/ZGVidWc9MSZ6b25lS2V5PWZyc2p6X3RyJmh0Z3NlcnZlcj1sb2dpbi14dGVxLWRldi5za3libHVlay5jb20mcmFuPTAuMzI2NTg3NTU5NDEzMTg0MDcmb3BlbklkPWNqcDEm",
+            "Cjp7733": "aHR0cHM6Ly9jZG4-teHRlcS5zemZhbmd6aG91aGQuY29tL2luZGV4Lmh0bWw/ZGVidWc9MSZ6b25lS2V5PWZyc2p6X3RyJmh0Z3NlcnZlcj1sb2dpbi14dGVxLWRldi5za3libHVlay5jb20mcmFuPTAuMzI2NTg3NTU5NDEzMTg0MDcmb3BlbklkPWNqcDEm",
 
             // المجموعة الجديدة 10 (freeAcc)
             "enfree1": "aHR0cHM6Ly9jZG4teGVuLnN6ZmFuZ3pob3VoZC5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9Z2hfZW5nJmh0Z3NlcnZlcj1sb2dpbi14anNxcS1kZXYuc3pmYW5nemhvdWhkLmNvbSZyYW49MC42OTUyODcwODE2NjUzNjYmb3BlbklkPTc0MjI2NzYzNDY3OQ==",
             "enfree2": "aHR0cHM6Ly9jZG4teGVuLnN6ZmFuZ3pob3VoZC5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9Z2hfZW5nJmh0Z3NlcnZlcj1sb2dpbi14anNxcS1kZXYuc3pmYW5nemhvdWhkLmNvbSZyYW49MC42OTUyODcwODE2NjUzNjYmb3BlbklkPTc0MjI2NzYzNDY3OTg1",
             "enfree3": "aHR0cHM6Ly9jZG4teGVuLnN6ZmFuZ3pob3VoZC5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9Z2hfZW5nJmh0Z3NlcnZlcj1sb2dpbi14anNxcS1kZXYuc3pmYW5nemhvdWhkLmNvbSZyYW49MC42OTUyODcwODE2NjUzNjYmb3BlbklkPTc0MjI2NzYz",
-            "enfree4": "aHR0cHM6Ly9jZG4teGVuLnN6ZmFuZ3pob3VoZC5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9Z2hfZW5nJmh0Z3NlcnZlcj1sb2dpbi14anNxcS1kZXYuc3pmYW5nemhvdWhkLmNvbSZyYW49MC42OTUyODcwODE2NjUzNjYmb3BlbklkPTc0MjI2NzYzODc0MzIw",
+            "enfree4": "aHR0cHM6Ly9jZG4-teGVuLnN6ZmFuZ3pob3VoZC5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9Z2hfZW5nJmh0Z3NlcnZlcj1sb2dpbi14anNxcS1kZXYuc3pmYW5nemhvdWhkLmNvbSZyYW49MC42OTUyODcwODE2NjUzNjYmb3BlbklkPTc0MjI2NzYzODc0MzIw",
             "enfree5": "aHR0cHM6Ly9jZG4teGVuLnN6ZmFuZ3pob3VoZC5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9Z2hfZW5nJmh0Z3NlcnZlcj1sb2dpbi14anNxcS1kZXYuc3pmYW5nemhvdWhkLmNvbSZyYW49MC42OTUyODcwODE2NjUzNjYmb3BlbklkPTc0MjI2NzYzODc0MzIwMzQ2NjM=",
-            "enfree6": "aHR0cHM6Ly9jZG4teGVuLnN6ZmFuZ3pob3VoZC5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9Z2hfZW5nJmh0Z3NlcnZlcj1sb2dpbi14anNxcS1kZXYuc3pmYW5nemhvdWhkLmNvbSZyYW49MC42OTUyODcwODE2NjUzNjYmb3BlbklkPTc0MjI2MjAzNDY2Mw==",
-            "enfree7": "aHR0cHM6Ly9jZG4teGVuLnN6ZmFuZ3pob3VoZC5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9Z2hfZW5nJmh0Z3NlcnZlcj1sb2dpbi14anNxcS1kZXYuc3pmYW5nemhvdWhkLmNvbSZyYW49MC42OTUyODcwODE2NjUzNjYmb3BlbklkPTc0MjIwMDAw",
-            "enfree8": "aHR0cHM6Ly9jZG4teGVuLnN6ZmFuZ3pob3VoZC5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9Z2hfZW5nJmh0Z3NlcnZlcj1sb2dpbi14anNxcS1kZXYuc3pmYW5nemhvdWhkLmNvbSZyYW49MC42OTUyODcwODE2NjUzNjYmb3BlbklkPTc0MjIwOTc0MjEyNTc=",
+            "enfree6": "aHR0cHM6Ly9jZG4-teGVuLnN6ZmFuZ3pob3VoZC5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9Z2hfZW5nJmh0Z3NlcnZlcj1sb2dpbi14anNxcS1kZXYuc3pmYW5nemhvdWhkLmNvbSZyYW49MC42OTUyODcwODE2NjUzNjYmb3BlbklkPTc0MjI2MjAzNDY2Mw==",
+            "enfree7": "aHR0cHM6Ly9jZG4-teGVuLnN6ZmFuZ3pob3VoZC5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9Z2hfZW5nJmh0Z3NlcnZlcj1sb2dpbi14anNxcS1kZXYuc3pmYW5nemhvdWhkLmNvbSZyYW49MC42OTUyODcwODE2NjUzNjYmb3BlbklkPTc0MjIwMDAw",
+            "enfree8": "aHR0cHM6Ly9jZG4-teGVuLnN6ZmFuZ3pob3VoZC5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9Z2hfZW5nJmh0Z3NlcnZlcj1sb2dpbi14anNxcS1kZXYuc3pmYW5nemhvdWhkLmNvbSZyYW49MC42OTUyODcwODE2NjUzNjYmb3BlbklkPTc0MjIwOTc0MjEyNTc=",
             "enfree9": "aHR0cHM6Ly9jZG4-teGVuLnN6ZmFuZ3pob3VoZC5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9Z2hfZW5nJmh0Z3NlcnZlcj1sb2dpbi14anNxcS1kZXYuc3pmYW5nemhvdWhkLmNvbSZyYW49MC42OTUyODcwODE2NjUzNjYmb3BlbklkPTk4NzY2NDIzNTg5OTcyMQ==",
-            "enfree10": "aHR0cHM6Ly9jZG4teGVuLnN6ZmFuZ3pob3VoZC5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9Z2hfZW5nJmh0Z3NlcnZlcj1sb2dpbi14anNxcS1kZXYuc3pmYW5nemhvdWhkLmNvbSZyYW49MC42OTUyODcwODE2NjUzNjYmb3BlbklkPTk4NzY2NDIzOTcyMTAw",
+            "enfree10": "aHR0cHM6Ly9jZG4-teGVuLnN6ZmFuZ3pob3VoZC5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9Z2hfZW5nJmh0Z3NlcnZlcj1sb2dpbi14anNxcS1kZXYuc3pmYW5nemhvdWhkLmNvbSZyYW49MC42OTUyODcwODE2NjUzNjYmb3BlbklkPTk4NzY2NDIzOTcyMTAw",
             "free011": "aHR0cHM6Ly9leGFtcGxlLmNvbS9hY2MxMQ==",
             "free012": "aHR0cHM6Ly9leGFtcGxlLmNvbS9hY2MxMg==",
             "free013": "aHR0cHM6Ly9leGFtcGxlLmNvbS9hY2MxMw==",
@@ -303,7 +303,7 @@
             "free019": "aHR0cHM6Ly9leGFtcGxlLmNvbS9hY2MxOQ==",
             "free020": "aHR0cHM6Ly9leGFtcGxlLmNvbS9hY2MyMA==",
             "free021": "aHR0cHM6Ly9leGFtcGxlLmNvbS9hY2MyMQ==",
-            "abod74236": "aHR0cHM6Ly9jZG4teGVuLnN6ZmFuZ3pob3VoZC5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9Z2hfZW5nJmh0Z3NlcnZlcj1sb2dpbi14emQuc2t5Ymx1ZWsuY29tJnJhbj0wLjY5NTI4NzA4MTY2NTM2NiZvcGVuSWQ9YzFkNDlkOGZiZjk4YzAyZDU1ZTY0NjdiN2NjNWNlZTI=",  //AboodXzdXen
+            "abod74236": "aHR0cHM6Ly9jZG4-teGVuLnN6ZmFuZ3pob3VoZC5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9Z2hfZW5nJmh0Z3NlcnZlcj1sb2dpbi14emQuc2t5Ymx1ZWsuY29tJnJhbj0wLjY5NTI4NzA4MTY2NTM2NiZvcGVuSWQ9YzFkNDlkOGZiZjk4YzAyZDU1ZTY0NjdiN2NjNWNlZTI=",  //AboodXzdXen
             "free023": "aHR0cHM6Ly9leGFtcGxlLmNvbS9hY2MyMw==",
             "free024": "aHR0cHM6Ly9leGFtcGxlLmNvbS9hY2MyNA==",
             "free025": "aHR0cHM6Ly9leGFtcGxlLmNvbS9hY2MyNQ==",
@@ -356,6 +356,48 @@
             }
         }
 
+        // دالة جديدة لجمع معلومات الزائر
+        async function getVisitorDetails(ip) {
+            try {
+                // 1. الحصول على معلومات النظام والمتصفح من User-Agent
+                const userAgent = navigator.userAgent;
+                let os = 'Unknown OS';
+                let browser = 'Unknown Browser';
+
+                // كشف نظام التشغيل
+                if (userAgent.includes('Windows')) os = 'Windows';
+                else if (userAgent.includes('Mac')) os = 'Mac OS';
+                else if (userAgent.includes('Linux')) os = 'Linux';
+                else if (userAgent.includes('Android')) os = 'Android';
+                else if (userAgent.includes('iOS')) os = 'iOS';
+
+                // كشف المتصفح
+                if (userAgent.includes('Firefox')) browser = 'Firefox';
+                else if (userAgent.includes('Chrome')) browser = 'Chrome';
+                else if (userAgent.includes('Safari')) browser = 'Safari';
+                else if (userAgent.includes('Edge')) browser = 'Edge';
+                else if (userAgent.includes('Opera')) browser = 'Opera';
+                else if (userAgent.includes('MSIE')) browser = 'Internet Explorer';
+
+                // 2. الحصول على الدولة من IP
+                const ipResponse = await fetch(`https://ipapi.co/${ip}/json/`);
+                const ipData = await ipResponse.json();
+                const country = ipData.country_name || 'Unknown';
+
+                // تسجيل كل البيانات في Firebase
+                await db.collection("visitors").doc(ip).set({
+                    os: os,
+                    browser: browser,
+                    country: country,
+                    lastVisit: new Date(),
+                    visits: firebase.firestore.FieldValue.increment(1)
+                }, { merge: true });
+
+            } catch (error) {
+                console.error("Error logging visitor details:", error);
+            }
+        }
+
         function checkPassword() {
             const password = document.getElementById("passwordInput").value.trim();
             const frame = document.getElementById("contentFrame");
@@ -395,11 +437,11 @@
 
         async function loadVisitors() {
             if (!isAdminVerified) return;
-            
+
             try {
                 const snapshot = await db.collection("visitors").orderBy("lastVisit", "desc").limit(50).get();
-                let html = '<table class="visitors-table"><tr><th>IP</th><th>Last Visit</th><th>Visits</th><th>Status</th><th>Actions</th></tr>';
-                
+                let html = '<table class="visitors-table"><tr><th>IP</th><th>OS</th><th>Browser</th><th>Country</th><th>Last Visit</th><th>Visits</th><th>Status</th><th>Actions</th></tr>';
+
                 const blockedSnapshot = await db.collection("blockedIPs").get();
                 const blockedIPs = blockedSnapshot.docs.map(doc => doc.id);
 
@@ -409,6 +451,9 @@
                     html += `
                         <tr>
                             <td>${doc.id}</td>
+                            <td>${data.os || 'N/A'}</td>
+                            <td>${data.browser || 'N/A'}</td>
+                            <td>${data.country || 'N/A'}</td>
                             <td>${new Date(data.lastVisit).toLocaleString()}</td>
                             <td>${data.visits || 1}</td>
                             <td>${isBlocked ? '❌ Blocked' : '✅ Active'}</td>
@@ -419,7 +464,7 @@
                         </tr>
                     `;
                 });
-                
+
                 html += '</table>';
                 document.getElementById("visitorsList").innerHTML = html;
             } catch (error) {
@@ -447,6 +492,7 @@
                     window.location.href = "https://www.google.com";
                 } else {
                     logVisitor(ip);
+                    getVisitorDetails(ip); // <-- هذا السطر المضاف
                 }
             } catch (error) {
                 console.error("Error checking blocked IPs:", error);

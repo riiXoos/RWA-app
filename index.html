@@ -38,8 +38,7 @@
             height: 100%;
             background: 
                 radial-gradient(circle at 10% 20%, transparent, rgba(255, 215, 0, 0.05) 0.5px, transparent 1px),
-                radial-gradient(circle at 90% 80%, transparent, rgba(255, 215, 0, 0.05) 0.5px, transparent 1px),
-                radial-gradient(circle at 50% 50%, transparent, rgba(255, 215, 0, 0.05) 0.5px, transparent 1px);
+                radial-gradient(circle at 90% 80%, transparent, rgba(255, 215, 0, 0.05) 0.5px, transparent 1px);
             background-size: 200px 200px;
             animation: stars 60s linear infinite;
             z-index: -1;
@@ -132,10 +131,15 @@
             50% { opacity: 1; }
         }
 
-        input {
+        .input-group {
+            position: relative;
             width: 100%;
+            margin: 1.5rem 0;
+        }
+
+        input {
+            width: calc(100% - 2rem);
             padding: 1rem;
-            margin: 1rem 0;
             background: rgba(0, 0, 0, 0.3);
             border: 1px solid var(--gold-light);
             border-radius: 6px;
@@ -157,15 +161,27 @@
             box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
         }
 
+        .input-border {
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            border: 1px solid var(--gold-light);
+            border-radius: 8px;
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
         button {
             width: 100%;
-            padding: 1rem;
+            padding: 0.8rem;
             margin-top: 1rem;
             background: transparent;
             color: var(--gold);
             border: 1px solid var(--gold-light);
             border-radius: 6px;
-            font-size: 1rem;
+            font-size: 0.9rem;
             cursor: pointer;
             transition: all 0.3s;
             font-family: 'Audiowide', cursive;
@@ -261,20 +277,137 @@
             color: white;
         }
 
-        /* الأهانات الإبداعية */
-        .funny-messages {
-            display: none;
+        /* زر NEW */
+        .new-container {
             position: fixed;
             bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.7);
-            border: 1px solid var(--error-red);
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .new-btn {
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            color: var(--gold);
+            border: 1px solid var(--gold-light);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .new-btn:hover {
+            background: rgba(255, 215, 0, 0.1);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+        }
+
+        .new-text {
+            font-size: 0.7rem;
+            margin-top: 2px;
+        }
+
+        .new-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--success-green);
+            color: black;
+            font-size: 0.6rem;
+            padding: 2px 5px;
+            border-radius: 50%;
+            font-weight: bold;
+        }
+
+        /* قائمة الألعاب */
+        .games-menu {
+            display: none;
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid var(--gold);
+            border-radius: 8px;
             padding: 10px;
-            border-radius: 5px;
-            color: var(--error-red);
-            font-size: 0.8rem;
-            z-index: 1000;
+            z-index: 10;
+            width: 180px;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.1);
+        }
+
+        .game-option {
+            padding: 8px 12px;
+            cursor: pointer;
+            border-bottom: 1px solid var(--gold-light);
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .game-option:last-child {
+            border-bottom: none;
+        }
+
+        .game-option:hover {
+            background: rgba(255, 215, 0, 0.1);
+            transform: translateX(5px);
+        }
+
+        /* صفحة إدخال ID للعبة */
+        .game-id-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 100;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .game-id-box {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 30px;
+            border-radius: 10px;
+            border: 1px solid var(--gold);
+            text-align: center;
+            width: 80%;
+            max-width: 400px;
+        }
+
+        /* زر الرجوع */
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            color: var(--gold);
+            border: 1px solid var(--gold-light);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 101;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 215, 0, 0.1);
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
         }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap" rel="stylesheet">
@@ -286,6 +419,9 @@
     <div class="gold-dots" style="top: 70%; left: 80%;"></div>
     <div class="gold-dots" style="top: 40%; left: 50%;"></div>
     
+    <!-- زر الرجوع -->
+    <div class="back-btn" id="backBtn" title="Back">←</div>
+    
     <div class="container">
         <div class="logo">RW</div>
         <h1>WELCOME TO RICO WORLD<span class="dots">
@@ -294,7 +430,10 @@
             <span class="dot"></span>
         </span></h1>
         
-        <input type="password" id="passwordInput" placeholder="ENTER ACCESS CODE" autocomplete="off">
+        <div class="input-group">
+            <div class="input-border"></div>
+            <input type="password" id="passwordInput" placeholder="ENTER ACCESS CODE" autocomplete="off">
+        </div>
         <button onclick="checkPassword()">INITIATE</button>
         
         <div id="errorMsg" class="error" style="display: none;"></div>
@@ -303,7 +442,10 @@
         <!-- لوحة التحكم -->
         <div id="adminPanel">
             <h3 style="color: var(--gold);">👑 ADMIN CONTROL PANEL</h3>
-            <input type="password" id="adminPassword" placeholder="ADMIN PASSWORD">
+            <div class="input-group">
+                <div class="input-border"></div>
+                <input type="password" id="adminPassword" placeholder="ADMIN PASSWORD">
+            </div>
             <button onclick="verifyAdmin()">AUTHENTICATE</button>
 
             <div id="adminControls" style="display:none; margin-top: 1rem;">
@@ -311,21 +453,54 @@
                 <div id="visitorsList"></div>
 
                 <h4 style="color: var(--gold); margin-top: 1rem;">IP SECURITY SYSTEM</h4>
-                <input type="text" id="ipToBlock" placeholder="IP TO BLOCK">
-                <button onclick="blockIP()" style="margin-top: 0.5rem;">BLOCK IP</button>
-                <input type="text" id="ipToUnblock" placeholder="IP TO UNBLOCK" style="margin-top: 0.5rem;">
-                <button onclick="unblockIP()" style="margin-top: 0.5rem;">UNBLOCK IP</button>
+                <div class="input-group">
+                    <div class="input-border"></div>
+                    <input type="text" id="ipToBlock" placeholder="IP TO BLOCK">
+                </div>
+                <button onclick="blockIP()">BLOCK IP</button>
+                <div class="input-group">
+                    <div class="input-border"></div>
+                    <input type="text" id="ipToUnblock" placeholder="IP TO UNBLOCK">
+                </div>
+                <button onclick="unblockIP()">UNBLOCK IP</button>
             </div>
+        </div>
+    </div>
+
+    <!-- زر NEW -->
+    <div class="new-container">
+        <div class="new-btn" onclick="toggleGamesMenu()">
+            <span class="new-text">NEW</span>
+            <span class="new-badge">!</span>
+        </div>
+    </div>
+
+    <!-- قائمة الألعاب -->
+    <div class="games-menu" id="gamesMenu">
+        <div class="game-option" onclick="openGameIdPage('English version')">English version</div>
+        <div class="game-option" onclick="openGameIdPage('Vietnam version')">Vietnam version</div>
+        <div class="game-option" onclick="openGameIdPage('China version')">China version</div>
+        <div class="game-option" onclick="openGameIdPage('Turkish version')">Turkish version</div>
+        <div class="game-option" onclick="openGameIdPage('New version')">New version</div>
+    </div>
+
+    <!-- صفحة إدخال ID للعبة -->
+    <div class="game-id-container" id="gameIdPage">
+        <div class="game-id-box">
+            <h2 id="selectedGameTitle">Game Title</h2>
+            <div class="input-group">
+                <div class="input-border"></div>
+                <input type="password" id="gameIdInput" placeholder="ENTER ACCESS CODE">
+            </div>
+            <button onclick="checkGamePassword()">INITIATE</button>
+            <p id="gameErrorMsg" class="error" style="display: none;">Incorrect code! Try again.</p>
         </div>
     </div>
 
     <iframe id="contentFrame" title="Protected Content" allowfullscreen></iframe>
 
-    <!-- رسائل الأهانات -->
-    <div id="funnyMessages" class="funny-messages"></div>
-
     <script>
-        // Firebase Config - كما هي
+        // Firebase Config
         const firebaseConfig = {
             apiKey: "AIzaSyD31ArwVR9L9H8p_ewGXq5b0cDcva0cqF0",
             authDomain: "visitor-logger-89c4b.firebaseapp.com",
@@ -342,9 +517,9 @@
         // admin
         const ADMIN_PASSWORD = "rico011899009";
 
-        // قاعدة بيانات الباسوردات والروابط (كما هي)
+        // قاعدة بيانات الباسوردات والروابط الأصلية
         const secretLinks = {
-            "880088": "aHR0cHM6Ly94dGVxLWRldi5za3libHVlay5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9ZnJzanpfdHImaHRnc2VydmVyPWxvZ2luLXh0ZXEtZGV2LnNreWJsdWVrLmNvbSZyYW49MC4zMjY1ODc1NTk0MTMxODQwNyZvcGVuSWQ9YWFhMQ",    //testXteq
+                        "880088": "aHR0cHM6Ly94dGVxLWRldi5za3libHVlay5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9ZnJzanpfdHImaHRnc2VydmVyPWxvZ2luLXh0ZXEtZGV2LnNreWJsdWVrLmNvbSZyYW49MC4zMjY1ODc1NTk0MTMxODQwNyZvcGVuSWQ9YWFhMQ",    //testXteq
             "010045": "aHR0cHM6Ly94ZnRndC1kZXYuc3pmYW5nemhvdWhkLmNvbS9pbmRleC5odG1sP2RlYnVnPTEmem9uZUtleT1zZ2NxX2Z0Z3QmaHRnc2VydmVyPWxvZ2luLXhmdGd0LWRldi5zemZhbmd6aG91aGQuY29tJnJhbj0wLjA1NzkxMTg5MDY1NDE4NDY3Jm9wZW5JZD1hYWExJiY=",    //dadyXftgt
             "s40013543": "aHR0cHM6Ly9jZG4teGVuLnN6ZmFuZ3pob3VoZC5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9Z2hfZW5nJmh0Z3NlcnZlcj1sb2dpbi14emQuc2t5Ymx1ZWsuY29tJnJhbj0wLjY5NTI4NzA4MTY2NTM2NiZvcGVuSWQ9YzFkNDlkOGZiZjk4YzAyZDU1ZTY0NjdiN2NjNWNlZTI=", //3abodXzdXen
             "77899009": "aHR0cHM6Ly9jZG4tbW16eW4uY3lwaGVyLXN0dWRpby5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9c2djcV92biZodGdzZXJ2ZXI9bG9naW4teHluLXRlc3QyLmhrY3hzZC5jb20mcmFuPTAuMDYyMTY5MDc2NzQzMTY3Mjk1Jm9wZW5JZD1hMTAmJg==",  //ventam1
@@ -484,19 +659,80 @@
             "cnfree60": "aHR0cHM6Ly94ZnRndC1kZXYuc3pmYW5nemhvdWhkLmNvbS9pbmRleC5odG1sP2RlYnVnPTEmem9uZUtleT1zZ2NxX2Z0Z3QmaHRnc2VydmVyPWxvZ2luLXhmdGd0LWRldi5zemZhbmd6aG91aGQuY29tJnJhbj0wLjA1NzkxMTg5MDY1NDE4NDY3Jm9wZW5JZD04NjQyNDY4"
         };
 
-        // الأهانات الإبداعية
-        const funnyErrors = [
-            "Wrong code! Are you typing or just randomly pressing keys?",
-            "Access denied! Even my grandma could guess better!",
-            "Nope! Try again... if you dare!",
-            "Error 404: Brain not found!",
-            "Incorrect! Maybe try 'password123'? Oh wait...",
-            "Wrong code! But nice try, hacker wannabe!",
-            "Access denied! You're not worthy... yet!"
-        ];
+        // قاعدة بيانات جديدة للألعاب (كود/رابط)
+        const gameLinks = {
+            "English version": {
+                "1111": "رابط_سري_1",
+                "2222": "رابط_سري_2"
+            },
+            "Vietnam version": {
+                "3333": "رابط_سري_3",
+                "4444": "رابط_سري_4"
+            },
+            "China version": {
+                "5555": "رابط_سري_5",
+                "6666": "رابط_سري_6"
+            },
+            "Turkish version": {
+                "7777": "رابط_سري_7",
+                "8888": "رابط_سري_8"
+            },
+            "New version": {
+                "9999": "رابط_سري_9",
+                "0000": "رابط_سري_10"
+            }
+        };
 
-        // متغير لحالة المسؤول
+        // متغيرات النظام
         let isAdminVerified = false;
+        let selectedGame = "";
+
+        // تبديل عرض قائمة الألعاب
+        function toggleGamesMenu() {
+            const menu = document.getElementById("gamesMenu");
+            menu.style.display = menu.style.display === "block" ? "none" : "block";
+            document.getElementById('backBtn').style.display = menu.style.display === "block" ? "flex" : "none";
+        }
+
+        // فتح صفحة إدخال ID للعبة المختارة
+        function openGameIdPage(gameName) {
+            selectedGame = gameName;
+            document.getElementById("selectedGameTitle").textContent = gameName;
+            document.getElementById("gamesMenu").style.display = "none";
+            document.getElementById("gameIdPage").style.display = "flex";
+            document.getElementById("gameIdInput").focus();
+            document.getElementById('backBtn').style.display = "flex";
+        }
+
+        // التحقق من باسورد اللعبة
+        function checkGamePassword() {
+            const password = document.getElementById("gameIdInput").value.trim();
+            const errorMsg = document.getElementById("gameErrorMsg");
+            const container = document.getElementById("gameIdPage");
+            const frame = document.getElementById("contentFrame");
+
+            if (password === ADMIN_PASSWORD) {
+                document.getElementById("adminPanel").style.display = "block";
+                container.style.display = "none";
+                document.getElementById('backBtn').style.display = "none";
+                return;
+            }
+
+            if (gameLinks[selectedGame] && gameLinks[selectedGame][password]) {
+                const decodedLink = decodeMagic(gameLinks[selectedGame][password]);
+                if (decodedLink) {
+                    frame.src = decodedLink;
+                    frame.style.display = "block";
+                    document.querySelector('.container').style.display = "none";
+                    container.style.display = "none";
+                    document.getElementById('backBtn').style.display = "flex";
+                } else {
+                    showGameError("Invalid link configuration");
+                }
+            } else {
+                showGameError("Incorrect code! Try again.");
+            }
+        }
 
         function decodeMagic(secret) {
             try {
@@ -507,7 +743,16 @@
             }
         }
 
-        // دالة جديدة لجمع معلومات الزائر
+        function showGameError(message) {
+            const errorMsg = document.getElementById("gameErrorMsg");
+            errorMsg.textContent = message;
+            errorMsg.style.display = "block";
+            setTimeout(() => {
+                errorMsg.style.display = "none";
+            }, 3000);
+        }
+
+        // بقية الدوال الأصلية...
         async function getVisitorDetails(ip) {
             try {
                 const userAgent = navigator.userAgent;
@@ -562,13 +807,12 @@
                     frame.src = decodedLink;
                     frame.style.display = "block";
                     container.style.display = "none";
+                    document.getElementById('backBtn').style.display = "flex";
                 } else {
                     showError("Invalid link configuration");
                 }
             } else {
-                const randomError = funnyErrors[Math.floor(Math.random() * funnyErrors.length)];
-                showError(randomError);
-                showFunnyMessage(randomError);
+                showError("Incorrect code! Try again.");
             }
         }
 
@@ -697,13 +941,27 @@
             }, 3000);
         }
 
-        function showFunnyMessage(message) {
-            const funnyMsg = document.getElementById("funnyMessages");
-            funnyMsg.textContent = message;
-            funnyMsg.style.display = "block";
-            setTimeout(() => {
-                funnyMsg.style.display = "none";
-            }, 3000);
+        // زر الرجوع
+        function setupBackButton() {
+            const backBtn = document.getElementById('backBtn');
+            backBtn.addEventListener('click', function() {
+                const frame = document.getElementById('contentFrame');
+                const gameIdPage = document.getElementById('gameIdPage');
+                const gamesMenu = document.getElementById('gamesMenu');
+                
+                if (frame.style.display === 'block') {
+                    frame.style.display = 'none';
+                    frame.src = '';
+                    document.querySelector('.container').style.display = 'block';
+                    backBtn.style.display = 'none';
+                } else if (gameIdPage.style.display === 'flex') {
+                    gameIdPage.style.display = 'none';
+                    gamesMenu.style.display = 'block';
+                } else if (gamesMenu.style.display === 'block') {
+                    gamesMenu.style.display = 'none';
+                    backBtn.style.display = 'none';
+                }
+            });
         }
 
         // Event Listeners
@@ -713,8 +971,15 @@
             }
         });
 
+        document.getElementById("gameIdInput").addEventListener("keyup", function(event) {
+            if (event.key === "Enter") {
+                checkGamePassword();
+            }
+        });
+
         // Get visitor IP on page load
         window.onload = function() {
+            setupBackButton();
             fetch('https://api.ipify.org?format=json')
                 .then(response => response.json())
                 .then(data => {

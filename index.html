@@ -9,75 +9,197 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     <style>
         :root {
+            --vantablack: #000000;
             --gold: #FFD700;
+            --gold-light: rgba(255, 215, 0, 0.7);
             --dark-gold: #FFA500;
             --error-red: #ff3333;
-            --success-green: #4CAF50;
+            --success-green: #00FF7F;
         }
 
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #000;
+            font-family: 'Audiowide', cursive;
+            background-color: var(--vantablack);
             color: var(--gold);
             margin: 0;
-            padding: 20px;
+            padding: 0;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
+            overflow: hidden;
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 10% 20%, transparent, rgba(255, 215, 0, 0.05) 0.5px, transparent 1px),
+                radial-gradient(circle at 90% 80%, transparent, rgba(255, 215, 0, 0.05) 0.5px, transparent 1px),
+                radial-gradient(circle at 50% 50%, transparent, rgba(255, 215, 0, 0.05) 0.5px, transparent 1px);
+            background-size: 200px 200px;
+            animation: stars 60s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes stars {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .gold-dots {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: var(--gold);
+            border-radius: 50%;
+            opacity: 0.8;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); }
+            25% { transform: translateY(-10px) translateX(5px); }
+            50% { transform: translateY(5px) translateX(-5px); }
+            75% { transform: translateY(-5px) translateX(10px); }
         }
 
         .container {
-            width: 100%;
+            position: relative;
+            width: 90%;
             max-width: 800px;
+            padding: 2rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            border: 1px solid var(--gold-light);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.1);
             text-align: center;
-            transition: all 0.3s ease;
+            z-index: 1;
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 1rem;
+            background: transparent;
+            color: var(--gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            border: 1px solid var(--gold-light);
         }
 
         h1 {
-            margin-bottom: 30px;
+            color: var(--gold);
+            margin: 0.5rem 0 1.5rem 0;
+            font-size: 2rem;
+            font-weight: 400;
+            letter-spacing: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-            font-size: 2.5rem;
+        }
+
+        .dots {
+            display: inline-block;
+            margin-left: 8px;
+        }
+
+        .dot {
+            display: inline-block;
+            width: 5px;
+            height: 5px;
+            background: var(--gold);
+            border-radius: 50%;
+            margin: 0 2px;
+            animation: blink 1.5s infinite ease-in-out;
+            opacity: 0;
+        }
+
+        .dot:nth-child(1) { animation-delay: 0.2s; }
+        .dot:nth-child(2) { animation-delay: 0.4s; }
+        .dot:nth-child(3) { animation-delay: 0.6s; }
+
+        @keyframes blink {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
         }
 
         input {
             width: 100%;
-            padding: 15px;
-            margin: 10px 0;
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid var(--gold);
-            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--gold-light);
+            border-radius: 6px;
             color: var(--gold);
             font-size: 1rem;
             outline: none;
-            transition: border 0.3s;
+            font-family: 'Audiowide', cursive;
+            text-align: center;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+        }
+
+        input::placeholder {
+            color: var(--gold-light);
         }
 
         input:focus {
-            border-color: var(--dark-gold);
+            border-color: var(--gold);
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
         }
 
         button {
             width: 100%;
-            padding: 15px;
-            background: linear-gradient(135deg, var(--gold), var(--dark-gold));
-            color: #000;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: bold;
+            padding: 1rem;
+            margin-top: 1rem;
+            background: transparent;
+            color: var(--gold);
+            border: 1px solid var(--gold-light);
+            border-radius: 6px;
+            font-size: 1rem;
             cursor: pointer;
-            margin-top: 20px;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: all 0.3s;
+            font-family: 'Audiowide', cursive;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
         }
 
         button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+            background: rgba(255, 215, 0, 0.1);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
         }
 
         button:active {
-            transform: translateY(0);
+            transform: scale(0.98);
+        }
+
+        .error {
+            color: var(--error-red);
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
+        }
+
+        .success {
+            color: var(--success-green);
+            margin-top: 1rem;
+            font-size: 0.9rem;
         }
 
         #contentFrame {
@@ -89,60 +211,43 @@
             border: none;
             display: none;
             z-index: 100;
-            background: #000;
+            background: var(--vantablack);
         }
 
-        .error {
-            color: var(--error-red);
-            margin-top: 15px;
-            display: none;
-            animation: shake 0.5s;
-        }
-
-        .success {
-            color: var(--success-green);
-            margin-top: 15px;
-            display: none;
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            20%, 60% { transform: translateX(-5px); }
-            40%, 80% { transform: translateX(5px); }
-        }
-
-        /* لوحة التحكم */
         #adminPanel {
             display: none;
-            margin-top: 20px;
-            padding: 15px;
-            background: rgba(0, 0, 0, 0.7);
-            border: 1px solid var(--gold);
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: rgba(0, 0, 0, 0.5);
             border-radius: 8px;
+            border: 1px solid var(--gold-light);
         }
 
         .visitors-table {
             width: 100%;
-            margin-top: 20px;
+            margin-top: 1rem;
             border-collapse: collapse;
+            color: var(--gold);
         }
 
         .visitors-table th, .visitors-table td {
-            padding: 10px;
-            border: 1px solid var(--gold);
+            padding: 8px;
+            border: 1px solid var(--gold-light);
             text-align: left;
+            font-size: 0.8rem;
         }
 
         .visitors-table th {
-            background-color: rgba(255, 215, 0, 0.2);
+            background-color: rgba(255, 215, 0, 0.1);
         }
 
         .action-btn {
-            padding: 5px 10px;
-            margin: 0 5px;
+            padding: 4px 8px;
+            margin: 0 2px;
             cursor: pointer;
             border: none;
-            border-radius: 4px;
+            border-radius: 3px;
+            font-size: 0.7rem;
             font-weight: bold;
         }
 
@@ -155,39 +260,72 @@
             background-color: var(--success-green);
             color: white;
         }
+
+        /* الأهانات الإبداعية */
+        .funny-messages {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid var(--error-red);
+            padding: 10px;
+            border-radius: 5px;
+            color: var(--error-red);
+            font-size: 0.8rem;
+            z-index: 1000;
+        }
     </style>
+    <link href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap" rel="stylesheet">
 </head>
 <body>
+    <div class="stars"></div>
+    <!-- النقاط الذهبية المتحركة -->
+    <div class="gold-dots" style="top: 20%; left: 15%;"></div>
+    <div class="gold-dots" style="top: 70%; left: 80%;"></div>
+    <div class="gold-dots" style="top: 40%; left: 50%;"></div>
+    
     <div class="container">
-        <h1>Welcome to Rico World</h1>
-        <input type="password" id="passwordInput" placeholder="Enter secret code" autocomplete="off">
-        <button onclick="checkPassword()">ENTER</button>
-        <div id="errorMsg" class="error">Incorrect code! Try again.</div>
-        <div id="successMsg" class="success"></div>
+        <div class="logo">RW</div>
+        <h1>WELCOME TO RICO WORLD<span class="dots">
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+        </span></h1>
+        
+        <input type="password" id="passwordInput" placeholder="ENTER ACCESS CODE" autocomplete="off">
+        <button onclick="checkPassword()">INITIATE</button>
+        
+        <div id="errorMsg" class="error" style="display: none;"></div>
+        <div id="successMsg" class="success" style="display: none;"></div>
 
         <!-- لوحة التحكم -->
         <div id="adminPanel">
-            <h3>👑 Admin Panel</h3>
-            <input type="password" id="adminPassword" placeholder="Admin Password">
-            <button onclick="verifyAdmin()">Access Admin Panel</button>
+            <h3 style="color: var(--gold);">👑 ADMIN CONTROL PANEL</h3>
+            <input type="password" id="adminPassword" placeholder="ADMIN PASSWORD">
+            <button onclick="verifyAdmin()">AUTHENTICATE</button>
 
-            <div id="adminControls" style="display:none;">
-                <h4>Visitors Management</h4>
+            <div id="adminControls" style="display:none; margin-top: 1rem;">
+                <h4 style="color: var(--gold);">VISITORS MANAGEMENT</h4>
                 <div id="visitorsList"></div>
 
-                <h4>Manual IP Management</h4>
-                <input type="text" id="ipToBlock" placeholder="IP to Block">
-                <button onclick="blockIP()">Block IP</button>
-                <input type="text" id="ipToUnblock" placeholder="IP to Unblock">
-                <button onclick="unblockIP()">Unblock IP</button>
+                <h4 style="color: var(--gold); margin-top: 1rem;">IP SECURITY SYSTEM</h4>
+                <input type="text" id="ipToBlock" placeholder="IP TO BLOCK">
+                <button onclick="blockIP()" style="margin-top: 0.5rem;">BLOCK IP</button>
+                <input type="text" id="ipToUnblock" placeholder="IP TO UNBLOCK" style="margin-top: 0.5rem;">
+                <button onclick="unblockIP()" style="margin-top: 0.5rem;">UNBLOCK IP</button>
             </div>
         </div>
     </div>
 
     <iframe id="contentFrame" title="Protected Content" allowfullscreen></iframe>
 
+    <!-- رسائل الأهانات -->
+    <div id="funnyMessages" class="funny-messages"></div>
+
     <script>
-        // Firebase Config - استبدل بك
+        // Firebase Config - كما هي
         const firebaseConfig = {
             apiKey: "AIzaSyD31ArwVR9L9H8p_ewGXq5b0cDcva0cqF0",
             authDomain: "visitor-logger-89c4b.firebaseapp.com",
@@ -196,13 +334,15 @@
             messagingSenderId: "82770471301",
             appId: "1:82770471301:web:8ae6147496f9075ca47cec"
         };
+        
+        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
         // admin
         const ADMIN_PASSWORD = "rico011899009";
 
-        // قاعدة بيانات الباسوردات والروابط (تم الحفاظ عليها كما هي)
+        // قاعدة بيانات الباسوردات والروابط (كما هي)
         const secretLinks = {
             "880088": "aHR0cHM6Ly94dGVxLWRldi5za3libHVlay5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9ZnJzanpfdHImaHRnc2VydmVyPWxvZ2luLXh0ZXEtZGV2LnNreWJsdWVrLmNvbSZyYW49MC4zMjY1ODc1NTk0MTMxODQwNyZvcGVuSWQ9YWFhMQ",    //testXteq
             "010045": "aHR0cHM6Ly94ZnRndC1kZXYuc3pmYW5nemhvdWhkLmNvbS9pbmRleC5odG1sP2RlYnVnPTEmem9uZUtleT1zZ2NxX2Z0Z3QmaHRnc2VydmVyPWxvZ2luLXhmdGd0LWRldi5zemZhbmd6aG91aGQuY29tJnJhbj0wLjA1NzkxMTg5MDY1NDE4NDY3Jm9wZW5JZD1hYWExJiY=",    //dadyXftgt
@@ -344,6 +484,17 @@
             "cnfree60": "aHR0cHM6Ly94ZnRndC1kZXYuc3pmYW5nemhvdWhkLmNvbS9pbmRleC5odG1sP2RlYnVnPTEmem9uZUtleT1zZ2NxX2Z0Z3QmaHRnc2VydmVyPWxvZ2luLXhmdGd0LWRldi5zemZhbmd6aG91aGQuY29tJnJhbj0wLjA1NzkxMTg5MDY1NDE4NDY3Jm9wZW5JZD04NjQyNDY4"
         };
 
+        // الأهانات الإبداعية
+        const funnyErrors = [
+            "Wrong code! Are you typing or just randomly pressing keys?",
+            "Access denied! Even my grandma could guess better!",
+            "Nope! Try again... if you dare!",
+            "Error 404: Brain not found!",
+            "Incorrect! Maybe try 'password123'? Oh wait...",
+            "Wrong code! But nice try, hacker wannabe!",
+            "Access denied! You're not worthy... yet!"
+        ];
+
         // متغير لحالة المسؤول
         let isAdminVerified = false;
 
@@ -359,19 +510,16 @@
         // دالة جديدة لجمع معلومات الزائر
         async function getVisitorDetails(ip) {
             try {
-                // 1. الحصول على معلومات النظام والمتصفح من User-Agent
                 const userAgent = navigator.userAgent;
                 let os = 'Unknown OS';
                 let browser = 'Unknown Browser';
 
-                // كشف نظام التشغيل
                 if (userAgent.includes('Windows')) os = 'Windows';
                 else if (userAgent.includes('Mac')) os = 'Mac OS';
                 else if (userAgent.includes('Linux')) os = 'Linux';
                 else if (userAgent.includes('Android')) os = 'Android';
                 else if (userAgent.includes('iOS')) os = 'iOS';
 
-                // كشف المتصفح
                 if (userAgent.includes('Firefox')) browser = 'Firefox';
                 else if (userAgent.includes('Chrome')) browser = 'Chrome';
                 else if (userAgent.includes('Safari')) browser = 'Safari';
@@ -379,12 +527,10 @@
                 else if (userAgent.includes('Opera')) browser = 'Opera';
                 else if (userAgent.includes('MSIE')) browser = 'Internet Explorer';
 
-                // 2. الحصول على الدولة من IP
                 const ipResponse = await fetch(`https://ipapi.co/${ip}/json/`);
                 const ipData = await ipResponse.json();
                 const country = ipData.country_name || 'Unknown';
 
-                // تسجيل كل البيانات في Firebase
                 await db.collection("visitors").doc(ip).set({
                     os: os,
                     browser: browser,
@@ -406,6 +552,7 @@
 
             if (password === ADMIN_PASSWORD) {
                 document.getElementById("adminPanel").style.display = "block";
+                showSuccess("Admin access unlocked!");
                 return;
             }
 
@@ -419,7 +566,9 @@
                     showError("Invalid link configuration");
                 }
             } else {
-                showError("Incorrect code! Try again.");
+                const randomError = funnyErrors[Math.floor(Math.random() * funnyErrors.length)];
+                showError(randomError);
+                showFunnyMessage(randomError);
             }
         }
 
@@ -492,7 +641,7 @@
                     window.location.href = "https://www.google.com";
                 } else {
                     logVisitor(ip);
-                    getVisitorDetails(ip); // <-- هذا السطر المضاف
+                    getVisitorDetails(ip);
                 }
             } catch (error) {
                 console.error("Error checking blocked IPs:", error);
@@ -545,6 +694,15 @@
             successMsg.style.display = "block";
             setTimeout(() => {
                 successMsg.style.display = "none";
+            }, 3000);
+        }
+
+        function showFunnyMessage(message) {
+            const funnyMsg = document.getElementById("funnyMessages");
+            funnyMsg.textContent = message;
+            funnyMsg.style.display = "block";
+            setTimeout(() => {
+                funnyMsg.style.display = "none";
             }, 3000);
         }
 

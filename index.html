@@ -9,18 +9,20 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     <style>
         :root {
-            --vantablack: #000000;
-            --gold: #FFD700;
-            --gold-light: rgba(255, 215, 0, 0.7);
-            --dark-gold: #FFA500;
+            --dark-gray: #1a1a1a;
+            --medium-gray: #2d2d2d;
+            --light-gray: #4a4a4a;
+            --highlight-gray: #707070;
+            --text-color: #e0e0e0;
+            --discord-blue: #5865F2;
             --error-red: #ff3333;
             --success-green: #00FF7F;
         }
 
         body {
             font-family: 'Audiowide', cursive;
-            background-color: var(--vantablack);
-            color: var(--gold);
+            background-color: var(--dark-gray);
+            color: var(--text-color);
             margin: 0;
             padding: 0;
             min-height: 100vh;
@@ -28,42 +30,17 @@
             justify-content: center;
             align-items: center;
             overflow: hidden;
-        }
-
-        .stars {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(circle at 10% 20%, transparent, rgba(255, 215, 0, 0.05) 0.5px, transparent 1px),
-                radial-gradient(circle at 90% 80%, transparent, rgba(255, 215, 0, 0.05) 0.5px, transparent 1px);
-            background-size: 200px 200px;
+            background-image: 
+                radial-gradient(circle at 10% 20%, transparent, rgba(114, 114, 114, 0.1) 1px, transparent 2px),
+                radial-gradient(circle at 90% 80%, transparent, rgba(114, 114, 114, 0.1) 1px, transparent 2px),
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cpath fill='%23707070' fill-opacity='0.2' d='M50 0c13.8 0 25 11.2 25 25S63.8 50 50 50 25 38.8 25 25 36.2 0 50 0zm0 10c-8.3 0-15 6.7-15 15s6.7 15 15 15 15-6.7 15-15-6.7-15-15-15zm0 5c5.5 0 10 4.5 10 10s-4.5 10-10 10-10-4.5-10-10 4.5-10 10-10zM15 30c8.3 0 15 6.7 15 15S23.3 60 15 60s-15-6.7-15-15 6.7-15 15-15zm70 0c8.3 0 15 6.7 15 15s-6.7 15-15 15-15-6.7-15-15 6.7-15 15-15z'/%3E%3C/svg%3E");
+            background-size: 200px 200px, 200px 200px, 100px 100px;
             animation: stars 60s linear infinite;
-            z-index: -1;
         }
 
         @keyframes stars {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .gold-dots {
-            position: absolute;
-            width: 6px;
-            height: 6px;
-            background: var(--gold);
-            border-radius: 50%;
-            opacity: 0.8;
-            animation: float 4s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0) translateX(0); }
-            25% { transform: translateY(-10px) translateX(5px); }
-            50% { transform: translateY(5px) translateX(-5px); }
-            75% { transform: translateY(-5px) translateX(10px); }
+            from { background-position: 0 0, 0 0, 0 0; }
+            to { background-position: -200px 200px, 200px -200px, 100px 100px; }
         }
 
         .container {
@@ -71,11 +48,12 @@
             width: 90%;
             max-width: 800px;
             padding: 2rem;
-            background: rgba(0, 0, 0, 0.2);
+            background: rgba(30, 30, 30, 0.8);
             border-radius: 12px;
-            border: 1px solid var(--gold-light);
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.1);
+            border: 1px solid var(--highlight-gray);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
             text-align: center;
+            backdrop-filter: blur(5px);
             z-index: 1;
         }
 
@@ -83,27 +61,28 @@
             width: 60px;
             height: 60px;
             margin: 0 auto 1rem;
-            background: transparent;
-            color: var(--gold);
+            background: var(--medium-gray);
+            color: var(--text-color);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 1.5rem;
             font-weight: bold;
-            border: 1px solid var(--gold-light);
+            border: 1px solid var(--highlight-gray);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
         }
 
         h1 {
-            color: var(--gold);
+            color: var(--text-color);
             margin: 0.5rem 0 1.5rem 0;
             font-size: 2rem;
             font-weight: 400;
             letter-spacing: 3px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
             display: flex;
             align-items: center;
             justify-content: center;
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
         }
 
         .dots {
@@ -115,7 +94,7 @@
             display: inline-block;
             width: 5px;
             height: 5px;
-            background: var(--gold);
+            background: var(--text-color);
             border-radius: 50%;
             margin: 0 2px;
             animation: blink 1.5s infinite ease-in-out;
@@ -140,10 +119,10 @@
         input {
             width: calc(100% - 2rem);
             padding: 1rem;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid var(--gold-light);
+            background: rgba(40, 40, 40, 0.7);
+            border: 1px solid var(--light-gray);
             border-radius: 6px;
-            color: var(--gold);
+            color: var(--text-color);
             font-size: 1rem;
             outline: none;
             font-family: 'Audiowide', cursive;
@@ -153,12 +132,12 @@
         }
 
         input::placeholder {
-            color: var(--gold-light);
+            color: var(--light-gray);
         }
 
         input:focus {
-            border-color: var(--gold);
-            box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+            border-color: var(--highlight-gray);
+            box-shadow: 0 0 15px rgba(112, 112, 112, 0.3);
         }
 
         .input-border {
@@ -167,7 +146,7 @@
             left: -5px;
             right: -5px;
             bottom: -5px;
-            border: 1px solid var(--gold-light);
+            border: 1px solid var(--light-gray);
             border-radius: 8px;
             pointer-events: none;
             opacity: 0.5;
@@ -177,9 +156,9 @@
             width: 100%;
             padding: 0.8rem;
             margin-top: 1rem;
-            background: transparent;
-            color: var(--gold);
-            border: 1px solid var(--gold-light);
+            background: var(--medium-gray);
+            color: var(--text-color);
+            border: 1px solid var(--light-gray);
             border-radius: 6px;
             font-size: 0.9rem;
             cursor: pointer;
@@ -191,8 +170,8 @@
         }
 
         button:hover {
-            background: rgba(255, 215, 0, 0.1);
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+            background: var(--light-gray);
+            box-shadow: 0 0 15px rgba(112, 112, 112, 0.2);
         }
 
         button:active {
@@ -227,7 +206,7 @@
             border: none;
             display: none;
             z-index: 100;
-            background: var(--vantablack);
+            background: var(--dark-gray);
         }
 
         #adminPanel {
@@ -236,25 +215,25 @@
             padding: 1.5rem;
             background: rgba(0, 0, 0, 0.5);
             border-radius: 8px;
-            border: 1px solid var(--gold-light);
+            border: 1px solid var(--light-gray);
         }
 
         .visitors-table {
             width: 100%;
             margin-top: 1rem;
             border-collapse: collapse;
-            color: var(--gold);
+            color: var(--text-color);
         }
 
         .visitors-table th, .visitors-table td {
             padding: 8px;
-            border: 1px solid var(--gold-light);
+            border: 1px solid var(--light-gray);
             text-align: left;
             font-size: 0.8rem;
         }
 
         .visitors-table th {
-            background-color: rgba(255, 215, 0, 0.1);
+            background-color: rgba(112, 112, 112, 0.1);
         }
 
         .action-btn {
@@ -277,8 +256,8 @@
             color: white;
         }
 
-        /* زر NEW */
-        .new-container {
+        /* زر Discord */
+        .discord-container {
             position: fixed;
             bottom: 20px;
             right: 20px;
@@ -290,12 +269,53 @@
             z-index: 10;
         }
 
+        .discord-btn {
+            width: 100%;
+            height: 100%;
+            background: var(--discord-blue);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s;
+            box-shadow: 0 0 15px rgba(88, 101, 242, 0.4);
+        }
+
+        .discord-btn:hover {
+            background: #4752c4;
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(88, 101, 242, 0.6);
+        }
+
+        .discord-icon {
+            width: 28px;
+            height: 28px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 512'%3E%3Cpath fill='white' d='M524.531,69.836a1.5,1.5,0,0,0-.764-.7A485.065,485.065,0,0,0,404.081,32.03a1.816,1.816,0,0,0-1.923.91,337.461,337.461,0,0,0-14.9,30.6,447.848,447.848,0,0,0-134.426,0,309.541,309.541,0,0,0-15.135-30.6,1.89,1.89,0,0,0-1.924-.91A483.689,483.689,0,0,0,116.085,69.137a1.712,1.712,0,0,0-.788.676C39.068,183.651,18.186,294.69,28.43,404.354a2.016,2.016,0,0,0,.765,1.375A487.666,487.666,0,0,0,176.02,479.918a1.9,1.9,0,0,0,2.063-.676A348.2,348.2,0,0,0,208.12,430.4a1.86,1.86,0,0,0-1.019-2.588,321.173,321.173,0,0,1-45.868-21.853,1.885,1.885,0,0,1-.185-3.126c3.082-2.309,6.166-4.711,9.109-7.137a1.819,1.819,0,0,1,1.9-.256c96.229,43.917,200.41,43.917,295.5,0a1.812,1.812,0,0,1,1.924.233c2.944,2.426,6.027,4.851,9.132,7.16a1.884,1.884,0,0,1-.162,3.126,301.407,301.407,0,0,1-45.89,21.83,1.875,1.875,0,0,0-1,2.611,391.055,391.055,0,0,0,30.014,48.815,1.864,1.864,0,0,0,2.063.7A486.048,486.048,0,0,0,610.7,405.729a1.882,1.882,0,0,0,.765-1.352C623.729,277.594,590.933,167.465,524.531,69.836ZM222.491,337.58c-28.972,0-52.844-26.587-52.844-59.239S193.056,219.1,222.491,219.1c29.665,0,53.306,26.82,52.843,59.239C275.334,310.993,251.924,337.58,222.491,337.58Zm195.38,0c-28.971,0-52.843-26.587-52.843-59.239S388.437,219.1,417.871,219.1c29.667,0,53.307,26.82,52.844,59.239C470.715,310.993,447.538,337.58,417.871,337.58Z'/%3E%3C/svg%3E");
+            background-size: contain;
+        }
+
+        /* زر NEW */
+        .new-container {
+            position: fixed;
+            bottom: 20px;
+            right: 80px;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+
         .new-btn {
             width: 100%;
             height: 100%;
-            background: transparent;
-            color: var(--gold);
-            border: 1px solid var(--gold-light);
+            background: var(--medium-gray);
+            color: var(--text-color);
+            border: 1px solid var(--highlight-gray);
             border-radius: 50%;
             cursor: pointer;
             display: flex;
@@ -304,11 +324,12 @@
             align-items: center;
             transition: all 0.3s;
             position: relative;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
         }
 
         .new-btn:hover {
-            background: rgba(255, 215, 0, 0.1);
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+            background: var(--light-gray);
+            box-shadow: 0 0 15px rgba(112, 112, 112, 0.3);
         }
 
         .new-text {
@@ -333,20 +354,20 @@
             display: none;
             position: fixed;
             bottom: 80px;
-            right: 20px;
-            background: rgba(0, 0, 0, 0.9);
-            border: 1px solid var(--gold);
+            right: 80px;
+            background: rgba(30, 30, 30, 0.95);
+            border: 1px solid var(--highlight-gray);
             border-radius: 8px;
             padding: 10px;
             z-index: 10;
             width: 180px;
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.1);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
         }
 
         .game-option {
             padding: 8px 12px;
             cursor: pointer;
-            border-bottom: 1px solid var(--gold-light);
+            border-bottom: 1px solid var(--light-gray);
             font-size: 0.85rem;
             transition: all 0.2s;
         }
@@ -356,7 +377,7 @@
         }
 
         .game-option:hover {
-            background: rgba(255, 215, 0, 0.1);
+            background: rgba(112, 112, 112, 0.1);
             transform: translateX(5px);
         }
 
@@ -376,10 +397,10 @@
         }
 
         .game-id-box {
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(30, 30, 30, 0.9);
             padding: 30px;
             border-radius: 10px;
-            border: 1px solid var(--gold);
+            border: 1px solid var(--highlight-gray);
             text-align: center;
             width: 80%;
             max-width: 400px;
@@ -390,9 +411,9 @@
             position: fixed;
             top: 20px;
             left: 20px;
-            background: rgba(0, 0, 0, 0.5);
-            color: var(--gold);
-            border: 1px solid var(--gold-light);
+            background: rgba(30, 30, 30, 0.7);
+            color: var(--text-color);
+            border: 1px solid var(--light-gray);
             border-radius: 50%;
             width: 40px;
             height: 40px;
@@ -406,19 +427,13 @@
         }
 
         .back-btn:hover {
-            background: rgba(255, 215, 0, 0.1);
-            box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+            background: rgba(112, 112, 112, 0.3);
+            box-shadow: 0 0 10px rgba(112, 112, 112, 0.3);
         }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="stars"></div>
-    <!-- النقاط الذهبية المتحركة -->
-    <div class="gold-dots" style="top: 20%; left: 15%;"></div>
-    <div class="gold-dots" style="top: 70%; left: 80%;"></div>
-    <div class="gold-dots" style="top: 40%; left: 50%;"></div>
-
     <!-- زر الرجوع -->
     <div class="back-btn" id="backBtn" title="Back">←</div>
 
@@ -441,7 +456,7 @@
 
         <!-- لوحة التحكم -->
         <div id="adminPanel">
-            <h3 style="color: var(--gold);">👑 ADMIN CONTROL PANEL</h3>
+            <h3 style="color: var(--text-color);">👑 ADMIN CONTROL PANEL</h3>
             <div class="input-group">
                 <div class="input-border"></div>
                 <input type="password" id="adminPassword" placeholder="ADMIN PASSWORD">
@@ -449,10 +464,10 @@
             <button onclick="verifyAdmin()">AUTHENTICATE</button>
 
             <div id="adminControls" style="display:none; margin-top: 1rem;">
-                <h4 style="color: var(--gold);">VISITORS MANAGEMENT</h4>
+                <h4 style="color: var(--text-color);">VISITORS MANAGEMENT</h4>
                 <div id="visitorsList"></div>
 
-                <h4 style="color: var(--gold); margin-top: 1rem;">IP SECURITY SYSTEM</h4>
+                <h4 style="color: var(--text-color); margin-top: 1rem;">IP SECURITY SYSTEM</h4>
                 <div class="input-group">
                     <div class="input-border"></div>
                     <input type="text" id="ipToBlock" placeholder="IP TO BLOCK">
@@ -464,6 +479,13 @@
                 </div>
                 <button onclick="unblockIP()">UNBLOCK IP</button>
             </div>
+        </div>
+    </div>
+
+    <!-- زر Discord -->
+    <div class="discord-container">
+        <div class="discord-btn" onclick="window.open('https://discord.gg/z4MzWs9v', '_blank')" title="Join our Discord">
+            <div class="discord-icon"></div>
         </div>
     </div>
 
@@ -660,7 +682,7 @@
             "free059": "aHR0cHM6Ly9leGFtcGxlLmNvbS9hY2M1OQ==",
             "cnfree60": "aHR0cHM6Ly94ZnRndC1kZXYuc3pmYW5nemhvdWhkLmNvbS9pbmRleC5odG1sP2RlYnVnPTEmem9uZUtleT1zZ2NxX2Z0Z3QmaHRnc2VydmVyPWxvZ2luLXhmdGd0LWRldi5zemZhbmd6aG91aGQuY29tJnJhbj0wLjA1NzkxMTg5MDY1NDE4NDY3Jm9wZW5JZD04NjQyNDY4"
         };
-        
+
         // قاعدة بيانات جديدة للألعاب (كود/رابط)
         const gameLinks = {
     "English version": {
@@ -907,7 +929,7 @@
             try {
                 const response = await fetch("https://ipapi.co/json/");
                 const visitorData = await response.json();
-                
+
                 const log = {
                     ip: ip,
                     city: visitorData.city,
@@ -920,11 +942,11 @@
                 };
 
                 await db.collection("visitors").doc(ip).set(log, { merge: true });
-                
+
                 // عرض بيانات الزائر في منطقة السجلات
                 document.getElementById("logContent").textContent = JSON.stringify(log, null, 2);
                 document.getElementById("logArea").style.display = "block";
-                
+
             } catch (error) {
                 console.error("Error logging visitor:", error);
                 document.getElementById("logContent").textContent = "Error logging visitor data";
@@ -985,7 +1007,7 @@
                     const data = doc.data();
                     const isBlocked = blockedIPs.includes(doc.id);
                     const location = `${data.city || ''}${data.city && data.country ? ', ' : ''}${data.country || ''}`;
-                    
+
                     html += `
                         <tr>
                             <td>${doc.id}</td>
@@ -1079,7 +1101,7 @@
                 const frame = document.getElementById('contentFrame');
                 const gameIdPage = document.getElementById('gameIdPage');
                 const gamesMenu = document.getElementById('gamesMenu');
-                
+
                 if (frame.style.display === 'block') {
                     frame.style.display = 'none';
                     frame.src = '';
